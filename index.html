@@ -43,8 +43,8 @@
           };
           const first = setTimeout(() => {
             doRotation();
-            intervalId = setInterval(doRotation, 2300);
-          }, 800);
+            intervalId = setInterval(doRotation, 2400);
+          }, 2600);
           return () => {
             clearTimeout(first);
             if (intervalId) clearInterval(intervalId);
@@ -67,8 +67,8 @@
           { id: "home", label: "Home" },
           { id: "building", label: "Building" },
           { id: "chatbot", label: "Chatbot" },
-          { id: "posts", label: "Posts" },
           { id: "resume", label: "Experience" },
+          { id: "posts", label: "Posts" },
           { id: "contact", label: "Contact" },
         ];
         const handleClick = (id) => {
@@ -243,7 +243,7 @@
                   </p>
                   <div className="hero-cta">
                     <a href="#chatbot" className="btn-p">
-                      Get to know me with AI ✦
+                      Get to Know My Product Work with AI ✦
                     </a>
                   </div>
                 </div>
@@ -404,61 +404,6 @@
               </div>
             </div>
 
-            <div id="posts" className="section-anchor">
-              <div className="strip">
-                <div className="wrap">
-                  <h2 className="sh">Recent Posts</h2>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                    {POSTS_DATA.map((p) => (
-                      <div className="card" key={p.title} style={{ padding: "22px 26px" }}>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "flex-start",
-                            flexWrap: "wrap",
-                            gap: 8,
-                            marginBottom: 10,
-                          }}
-                        >
-                          <h3
-                            style={{
-                              fontFamily: "'Syne',sans-serif",
-                              fontWeight: 600,
-                              fontSize: 16,
-                              color: "#F0F0F5",
-                              maxWidth: 520,
-                            }}
-                          >
-                            {p.title}
-                          </h3>
-                          <span
-                            className={`tag ${p.source === "LinkedIn" ? "source-li" : "source-ar"}`}
-                          >
-                            {p.source}
-                          </span>
-                        </div>
-                        <p
-                          style={{
-                            fontSize: 13,
-                            color: "#8888A0",
-                            lineHeight: 1.65,
-                            fontFamily: "'DM Sans',sans-serif",
-                            marginBottom: 12,
-                          }}
-                        >
-                          {p.desc}
-                        </p>
-                        <a href={p.link} className="rmore" target="_blank" rel="noreferrer">
-                          Read more ↗
-                        </a>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div id="resume" className="section-anchor">
               <div className="strip">
                 <div className="wrap">
@@ -522,6 +467,61 @@
                       </div>
                     </section>
                   </article>
+                </div>
+              </div>
+            </div>
+
+            <div id="posts" className="section-anchor">
+              <div className="strip">
+                <div className="wrap">
+                  <h2 className="sh">Recent Posts</h2>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    {POSTS_DATA.map((p) => (
+                      <div className="card" key={p.title} style={{ padding: "22px 26px" }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                            flexWrap: "wrap",
+                            gap: 8,
+                            marginBottom: 10,
+                          }}
+                        >
+                          <h3
+                            style={{
+                              fontFamily: "'Syne',sans-serif",
+                              fontWeight: 600,
+                              fontSize: 16,
+                              color: "#F0F0F5",
+                              maxWidth: 520,
+                            }}
+                          >
+                            {p.title}
+                          </h3>
+                          <span
+                            className={`tag ${p.source === "LinkedIn" ? "source-li" : "source-ar"}`}
+                          >
+                            {p.source}
+                          </span>
+                        </div>
+                        <p
+                          style={{
+                            fontSize: 13,
+                            color: "#8888A0",
+                            lineHeight: 1.65,
+                            fontFamily: "'DM Sans',sans-serif",
+                            marginBottom: 12,
+                          }}
+                        >
+                          {p.desc}
+                        </p>
+                        <a href={p.link} className="rmore" target="_blank" rel="noreferrer">
+                          Read more ↗
+                        </a>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
