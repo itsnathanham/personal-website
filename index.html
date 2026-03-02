@@ -32,6 +32,8 @@ html,body{background:#0A0A0F;color:#F0F0F5;font-family:'DM Sans',sans-serif;}
 .tag{display:inline-block;padding:3px 10px;border-radius:100px;background:#1a1a28;color:#6EE7B7;font-size:11px;font-family:'DM Sans',sans-serif;font-weight:500;}
 .card{background:#111118;border:1px solid #1E1E2E;border-radius:12px;overflow:hidden;transition:background .2s;}
 .card:hover{background:#16161F;}
+.building-card{transition:transform .2s ease,box-shadow .2s ease;}
+.building-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.28);}
 .accent-bar{height:2px;background:linear-gradient(90deg,#6EE7B7,#3B82F6);}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdrop-filter:blur(12px);border-bottom:1px solid #1E1E2E;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;}
 .nlogo{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:#F0F0F5;cursor:pointer;letter-spacing:.02em;}
@@ -65,7 +67,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdro
 .ft{font-size:12px;color:#555570;font-family:'DM Sans',sans-serif;}
 .fl{font-size:12px;color:#555570;font-family:'DM Sans',sans-serif;cursor:pointer;transition:color .2s;text-decoration:none;}
 .fl:hover{color:#6EE7B7;}
-@media(max-width:640px){.hgrid{grid-template-columns:1fr;text-align:center;}.ring{margin:0 auto;width:180px;height:180px;}.nlinks{display:none;}.pgrid{grid-template-columns:1fr;}}
+.section-anchor{scroll-margin-top:60px;}
+@media(max-width:640px){.hgrid{grid-template-columns:1fr;text-align:left;}.ring{margin:0 auto;width:180px;height:180px;}.nlinks{display:none;}.pgrid{grid-template-columns:1fr;}}
 `;
 
       const WORDS = ["Fintech", "AI", "Growth"];
@@ -86,20 +89,43 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdro
         return <span className={`rw grad ${vis ? "on" : "off"}`}>{WORDS[i]}</span>;
       }
 
-      function Nav({ page, go }) {
+      function scrollToSection(id) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+          window.history.replaceState(null, "", "#" + id);
+        }
+      }
+
+      function Nav({ activeSection, onNavigate }) {
+        const sections = [
+          { id: "home", label: "Home" },
+          { id: "building", label: "Building" },
+          { id: "posts", label: "Posts" },
+          { id: "contact", label: "Contact" },
+        ];
+        const handleClick = (id) => {
+          onNavigate(id);
+          scrollToSection(id);
+        };
         return (
           <nav>
-            <div className="nlogo" onClick={() => go("home")}>
+            <div
+              className="nlogo"
+              onClick={() => handleClick("home")}
+              style={{ cursor: "pointer" }}
+            >
               Nathan Hamilton
             </div>
             <ul className="nlinks">
-              {["home", "building", "posts"].map((p) => (
+              {sections.map(({ id, label }) => (
                 <li
-                  key={p}
-                  className={`nl ${page === p ? "on" : ""}`}
-                  onClick={() => go(p)}
+                  key={id}
+                  className={`nl ${activeSection === id ? "on" : ""}`}
+                  onClick={() => handleClick(id)}
+                  style={{ cursor: "pointer" }}
                 >
-                  {p[0].toUpperCase() + p.slice(1)}
+                  {label}
                 </li>
               ))}
             </ul>
@@ -133,11 +159,29 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdro
         );
       }
 
-      function Home({ go }) {
+      const POSTS_DATA = [
+        {
+          title: "7 Lessons I Learned Turning Around SaaS Products",
+          source: "Article",
+          date: "December 2025",
+          desc: "A retro on acquiring and turning around Dividend Watch — user proximity, onboarding over growth, power users vs. North Star, and the lessons that matter when revenue is bleeding.",
+          link: "https://www.linkedin.com/pulse/7-lessons-i-learned-turning-around-saas-product-nathan-hamilton-alpsc/",
+        },
+        {
+          title: "My Daily AI Product Toolkit",
+          source: "LinkedIn",
+          date: "December 2025",
+          desc: "ChatGPT, Gemini, Claude, Cursor, Perplexity — how I use AI day to day to ship product, run growth experiments, and produce content without adding headcount.",
+          link: "https://www.linkedin.com/pulse/my-daily-ai-product-management-toolkit-nathan-hamilton-qji9c/",
+        },
+      ];
+
+      function SinglePage() {
         return (
           <div className="page">
-            <div className="wrap wrap-hero">
-              <div className="hgrid">
+            <section id="home" className="section-anchor">
+              <div className="wrap wrap-hero">
+                <div className="hgrid">
                 <div>
                   <h1
                     style={{
@@ -190,15 +234,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdro
                 </div>
               </div>
             </div>
+            </section>
 
-            <div className="strip">
+            <div id="building" className="strip section-anchor">
               <div className="wrap">
                 <h2 className="sh">Currently Building</h2>
                 <div className="pgrid">
                   {[
                     {
                       title: "Dividend Watch",
-                      desc: "B2C investing analytics SaaS — portfolio tracking, dividend forecasting, and alerts for 39,000 active users.",
+                      desc: "Executing a product-led turnaround for a B2C investing analytics SaaS with 39,000 users.",
                       tags: [
                         "Cursor",
                         "Claude",
@@ -206,101 +251,240 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdro
                         "39K Users",
                         "Product-led growth",
                       ],
+                      link: "https://dividend.watch/",
                     },
                     {
-                      title: "Chore Tracker App",
-                      desc: "A household chore tracking app built as a personal project — full product lifecycle from concept to launch.",
-                      tags: ["Cursor", "Claude", "Figma", "Personal Project"],
+                      title: "Chore Tracker App (in progress)",
+                      desc: "Full product lifecycle kids chore tracking app with streak mechanics and genAI.",
+                      tags: ["Cursor", "Claude", "Figma", "Personal Project", "genAI assistant"],
+                      link: "https://github.com/itsnathanham",
                     },
                     {
-                      title: "Golf Analytics App",
-                      desc: "Tracking rounds, handicap trends, and performance insights — built with AI-assisted workflows.",
-                      tags: ["Cursor", "Claude", "Figma", "Personal Project"],
+                      title: "Golf Analytics App (in progress)",
+                      desc: "Tracking rounds, handicap trends, and performance insights, genAI coaching assistant.",
+                      tags: ["Cursor", "Claude", "Figma", "Personal Project", "genAI assistant"],
+                      link: "https://github.com/itsnathanham",
                     },
                     {
                       title: "Job Search Agent",
-                      desc: "An AI agent that helps run a job search — researching roles, tracking leads, and automating outreach workflows.",
+                      desc: "A custom AI agent that pulls from company job boards and synthesizes career insights in my Airtable workflow.",
                       tags: ["Zapier Agent", "Sonnet 4.6", "Airtable"],
+                      link: null,
                     },
                     {
                       title: "This Website",
                       desc: "A fast, clean personal website built and iterated with AI-assisted workflows.",
                       tags: ["Claude Code", "Cursor"],
+                      link: null,
                     },
-                  ].map((p) => (
-                    <div className="card" key={p.title} style={{ padding: 0 }}>
-                      <div className="accent-bar" />
-                      <div style={{ padding: "18px 22px 22px" }}>
-                        <h3
+                  ].map((p) => {
+                    const cardContent = (
+                      <>
+                        <div className="accent-bar" />
+                        <div style={{ padding: "18px 22px 22px" }}>
+                          <h3
+                            style={{
+                              fontFamily: "'Syne',sans-serif",
+                              fontWeight: 700,
+                              fontSize: 16,
+                              marginBottom: 8,
+                              color: "#F0F0F5",
+                            }}
+                          >
+                            {p.title}
+                          </h3>
+                          <p
+                            style={{
+                              fontSize: 13,
+                              color: "#8888A0",
+                              lineHeight: 1.65,
+                              marginBottom: 14,
+                              fontFamily: "'DM Sans',sans-serif",
+                            }}
+                          >
+                            {p.desc}
+                          </p>
+                          <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                            {p.tags.map((t) => (
+                              <span key={t} className="tag">
+                                {t}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </>
+                    );
+                    return p.link ? (
+                      <a
+                        key={p.title}
+                        href={p.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="card building-card"
+                        style={{ padding: 0, textDecoration: "none", color: "inherit", display: "block" }}
+                      >
+                        {cardContent}
+                      </a>
+                    ) : (
+                      <div key={p.title} className="card building-card" style={{ padding: 0 }}>
+                        {cardContent}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <div id="chatbot" className="section-anchor">
+              <div className="strip">
+                <div className="wrap">
+                  <h2 className="sh">Nathan PM Chatbot</h2>
+                  <div className="wrap-sm" style={{ paddingTop: 0, paddingBottom: 48 }}>
+                    <div className="chat-box">
+                      <h2
+                        style={{
+                          fontFamily: "'Syne',sans-serif",
+                          fontSize: 22,
+                          fontWeight: 700,
+                          marginBottom: 12,
+                        }}
+                        className="grad"
+                      >
+                        Ask me anything
+                      </h2>
+                      <p
+                        style={{
+                          fontSize: 14,
+                          color: "#8888A0",
+                          lineHeight: 1.7,
+                          maxWidth: 400,
+                          margin: "0 auto 22px",
+                          fontFamily: "'DM Sans',sans-serif",
+                        }}
+                      >
+                        An AI version of me is coming here soon — powered by my work
+                        history, writing, and experience. Until then, reach out
+                        directly.
+                      </p>
+                      {/* TODO: Replace with Zapier chatbot embed */}
+                      <a href="https://www.linkedin.com/in/nathan-hamilton-8492456/" className="btn-g" target="_blank" rel="noreferrer">
+                        → Connect on LinkedIn
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="posts" className="section-anchor">
+              <div className="strip">
+                <div className="wrap">
+                  <h2 className="sh">Recent Posts</h2>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    {POSTS_DATA.map((p) => (
+                      <div className="card" key={p.title} style={{ padding: "22px 26px" }}>
+                        <div
                           style={{
-                            fontFamily: "'Syne',sans-serif",
-                            fontWeight: 700,
-                            fontSize: 16,
-                            marginBottom: 8,
-                            color: "#F0F0F5",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                            flexWrap: "wrap",
+                            gap: 8,
+                            marginBottom: 10,
                           }}
                         >
-                          {p.title}
-                        </h3>
+                          <h3
+                            style={{
+                              fontFamily: "'Syne',sans-serif",
+                              fontWeight: 600,
+                              fontSize: 16,
+                              color: "#F0F0F5",
+                              maxWidth: 520,
+                            }}
+                          >
+                            {p.title}
+                          </h3>
+                          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                            <span
+                              className={`tag ${p.source === "LinkedIn" ? "source-li" : "source-ar"}`}
+                            >
+                              {p.source}
+                            </span>
+                            <span
+                              style={{
+                                fontSize: 12,
+                                color: "#555570",
+                                fontFamily: "'DM Sans',sans-serif",
+                              }}
+                            >
+                              {p.date}
+                            </span>
+                          </div>
+                        </div>
                         <p
                           style={{
                             fontSize: 13,
                             color: "#8888A0",
                             lineHeight: 1.65,
-                            marginBottom: 14,
                             fontFamily: "'DM Sans',sans-serif",
+                            marginBottom: 12,
                           }}
                         >
                           {p.desc}
                         </p>
-                        <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                          {p.tags.map((t) => (
-                            <span key={t} className="tag">
-                              {t}
-                            </span>
-                          ))}
-                        </div>
+                        <a href={p.link} className="rmore" target="_blank" rel="noreferrer">
+                          Read more →
+                        </a>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-                <button className="btn-g" onClick={() => go("building")}>
-                  → Learn more about what I'm building
-                </button>
               </div>
             </div>
 
-            <div className="wrap-sm" id="chatbot">
-              <div className="chat-box">
-                <h2
-                  style={{
-                    fontFamily: "'Syne',sans-serif",
-                    fontSize: 22,
-                    fontWeight: 700,
-                    marginBottom: 12,
-                  }}
-                  className="grad"
-                >
-                  Ask me anything
-                </h2>
-                <p
-                  style={{
-                    fontSize: 14,
-                    color: "#8888A0",
-                    lineHeight: 1.7,
-                    maxWidth: 400,
-                    margin: "0 auto 22px",
-                    fontFamily: "'DM Sans',sans-serif",
-                  }}
-                >
-                  An AI version of me is coming here soon — powered by my work
-                  history, writing, and experience. Until then, reach out
-                  directly.
-                </p>
-                {/* TODO: Replace with Zapier chatbot embed */}
-                <a href="#" className="btn-g">
-                  → Connect on LinkedIn
-                </a>
+            <div id="contact" className="section-anchor">
+              <div className="strip">
+                <div className="wrap">
+                  <h2 className="sh">Contact</h2>
+                  <p
+                    style={{
+                      fontSize: 16,
+                      color: "#8888A0",
+                      lineHeight: 1.7,
+                      fontFamily: "'DM Sans',sans-serif",
+                      marginBottom: 16,
+                    }}
+                  >
+                    Reach out anytime.
+                  </p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
+                    <a
+                      href="mailto:nathanhamilton82@gmail.com"
+                      className="fl"
+                      style={{ fontSize: 16 }}
+                    >
+                      nathanhamilton82@gmail.com
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/in/nathan-hamilton-8492456/"
+                      className="fl"
+                      style={{ fontSize: 16 }}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      LinkedIn ↗
+                    </a>
+                    <a
+                      href="https://github.com/itsnathanham"
+                      className="fl"
+                      style={{ fontSize: 16 }}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      GitHub ↗
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -315,28 +499,28 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdro
             title: "Dividend Watch",
             sub: "B2C Investing Analytics SaaS",
             tags: ["Cursor", "Claude", "Figma", "39K Users", "Product-led growth"],
-            body: "Dividend Watch is an investing analytics platform I acquired and turned around after it was struggling. I rebuilt the product strategy, redesigned core features, and built out the growth systems. The result: 43% ARR growth, churn reduced from 11% to 5%, and trial-to-paid conversion improved from 28% to 73%. It now serves 39,000 users.",
+            body: "Executing a product-led turnaround for a B2C investing analytics SaaS with 39,000 users.",
             link: "Visit Dividend Watch →",
           },
           {
-            title: "Chore Tracker App",
-            sub: "Personal Project — Household Management App",
-            tags: ["Cursor", "Claude", "Figma", "Personal Project"],
-            body: "A full-stack personal project built to scratch my own itch — a simple, clean app for tracking household chores across multiple people. Built end-to-end using Cursor and Claude for engineering, Figma for design. An exercise in shipping real product fast with modern AI-assisted workflows.",
+            title: "Chore Tracker App (in progress)",
+            sub: "Personal Project — Kids Chore Tracking",
+            tags: ["Cursor", "Claude", "Figma", "Personal Project", "genAI assistant"],
+            body: "Full product lifecycle kids chore tracking app with streak mechanics and genAI.",
             link: "View on GitHub →",
           },
           {
-            title: "Golf Analytics App",
+            title: "Golf Analytics App (in progress)",
             sub: "Personal Project — Performance Tracking for Golfers",
-            tags: ["Cursor", "Claude", "Figma", "Personal Project"],
-            body: "A personal project that tracks rounds, visualizes handicap trends, and surfaces patterns in my game. Built as a real product — not just a side script — with a proper UI and data model. Another experiment in AI-assisted product building, and genuinely useful for any serious golfer.",
+            tags: ["Cursor", "Claude", "Figma", "Personal Project", "genAI assistant"],
+            body: "Tracking rounds, handicap trends, and performance insights, genAI coaching assistant.",
             link: "View on GitHub →",
           },
           {
             title: "Job Search Agent",
             sub: "Automation + Research Agent",
             tags: ["Zapier Agent", "Sonnet 4.6", "Airtable"],
-            body: "A job-search copilot that helps identify roles, keep an Airtable pipeline up to date, and automate repeatable workflows across applications and outreach.",
+            body: "A custom AI agent that pulls from company job boards and synthesizes career insights in my Airtable workflow.",
             link: "See details →",
           },
           {
@@ -527,14 +711,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdro
       }
 
       function App() {
-        const [page, setPage] = useState("home");
+        const [activeSection, setActiveSection] = useState(
+          () => (typeof window !== "undefined" && window.location.hash.slice(1)) || "home"
+        );
+        useEffect(() => {
+          const onHash = () => setActiveSection(window.location.hash.slice(1) || "home");
+          window.addEventListener("hashchange", onHash);
+          return () => window.removeEventListener("hashchange", onHash);
+        }, []);
         return (
           <>
             <style>{css}</style>
-            <Nav page={page} go={setPage} />
-            {page === "home" && <Home go={setPage} />}
-            {page === "building" && <Building />}
-            {page === "posts" && <Posts />}
+            <Nav activeSection={activeSection} onNavigate={setActiveSection} />
+            <SinglePage />
           </>
         );
       }
