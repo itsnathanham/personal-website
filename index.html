@@ -8,9 +8,16 @@
       name="description"
       content="Nathan Hamilton — 0 to 1 product leader. Fintech, AI, growth."
     />
+    <meta property="og:title" content="Nathan Hamilton" />
+    <meta property="og:description" content="0 to 1 product leader. Fintech, AI, growth." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://nathanhamilton.com/assets/profile.png" />
+    <!-- Update og:image to your deployed URL when publishing -->
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/styles.css" />
   </head>
   <body>
+    <a href="#home" class="skip-link">Skip to main content</a>
     <div id="root"></div>
 
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -20,90 +27,135 @@
     <script type="text/babel" data-presets="react">
       const { useState, useEffect } = React;
 
-      const css = `
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap');
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{background:#0A0A0F;color:#F0F0F5;font-family:'DM Sans',sans-serif;}
-.grad{background:linear-gradient(135deg,#6EE7B7,#3B82F6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.btn-p{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:100px;background:linear-gradient(135deg,#6EE7B7,#3B82F6);color:#0A0A0F;font-family:'DM Sans',sans-serif;font-weight:600;font-size:15px;border:none;cursor:pointer;transition:opacity .2s;text-decoration:none;}
-.btn-p:hover{opacity:.82;}
-.btn-g{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:100px;background:transparent;color:#6EE7B7;font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;border:1px solid #2a2a3a;cursor:pointer;transition:border-color .2s;text-decoration:none;}
-.btn-g:hover{border-color:#6EE7B7;}
-.tag{display:inline-block;padding:3px 10px;border-radius:100px;background:#1a1a28;color:#6EE7B7;font-size:11px;font-family:'DM Sans',sans-serif;font-weight:500;}
-.card{background:#111118;border:1px solid #1E1E2E;border-radius:12px;overflow:hidden;transition:background .2s;}
-.card:hover{background:#16161F;}
-.accent-bar{height:2px;background:linear-gradient(90deg,#6EE7B7,#3B82F6);}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdrop-filter:blur(12px);border-bottom:1px solid #1E1E2E;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;}
-.nlogo{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:#F0F0F5;cursor:pointer;letter-spacing:.02em;}
-.nlinks{display:flex;gap:28px;list-style:none;}
-.nl{font-family:'DM Sans',sans-serif;font-size:14px;color:#8888A0;cursor:pointer;transition:color .2s;position:relative;padding-bottom:2px;}
-.nl:hover{color:#F0F0F5;}
-.nl.on{color:#6EE7B7;}
-.nl.on::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:#6EE7B7;}
-.page{padding-top:60px;min-height:100vh;}
-.wrap{max-width:1100px;margin:0 auto;padding:72px 32px;}
-.wrap-hero{padding:56px 32px;}
-.wrap-sm{max-width:740px;margin:0 auto;padding:72px 32px;}
-.sh{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;color:#F0F0F5;margin-bottom:28px;display:flex;align-items:center;gap:10px;}
-.sh::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#6EE7B7,#3B82F6);flex-shrink:0;}
-.chat-box{border:1px dashed #2a2a3a;border-radius:12px;padding:48px 32px;text-align:center;}
-.hgrid{display:grid;grid-template-columns:1fr 240px;gap:36px;align-items:center;}
-.ring{width:200px;height:200px;border-radius:50%;padding:4px;background:linear-gradient(135deg,#6EE7B7,#3B82F6);}
-.ring-in{width:100%;height:100%;border-radius:50%;background:#1E1E2E;display:flex;align-items:center;justify-content:center;font-size:11px;color:#555570;text-align:center;font-family:'DM Sans',sans-serif;overflow:hidden;}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:28px;}
-.source-li{background:#1a2744;color:#3B82F6;}
-.source-ar{background:#1a2d1f;color:#6EE7B7;}
-.rmore{color:#6EE7B7;font-size:14px;cursor:pointer;text-decoration:none;font-family:'DM Sans',sans-serif;}
-.rmore:hover{text-decoration:underline;}
-.pt{font-family:'Syne',sans-serif;font-size:clamp(36px,5vw,54px);font-weight:800;line-height:1.1;margin-bottom:18px;}
-.ps{font-size:16px;color:#8888A0;line-height:1.75;font-family:'DM Sans',sans-serif;max-width:520px;margin-bottom:28px;}
-.rw{display:inline-block;transition:opacity .35s ease,transform .35s ease;}
-.rw.on{opacity:1;transform:translateY(0);}
-.rw.off{opacity:0;transform:translateY(8px);}
-.strip{background:#0D0D14;border-top:1px solid #1E1E2E;border-bottom:1px solid #1E1E2E;}
-.footer-wrap{max-width:1100px;margin:0 auto;padding:20px 32px;border-top:1px solid #1E1E2E;display:flex;justify-content:space-between;align-items:center;margin-top:80px;}
-.ft{font-size:12px;color:#555570;font-family:'DM Sans',sans-serif;}
-.fl{font-size:12px;color:#555570;font-family:'DM Sans',sans-serif;cursor:pointer;transition:color .2s;text-decoration:none;}
-.fl:hover{color:#6EE7B7;}
-@media(max-width:640px){.hgrid{grid-template-columns:1fr;text-align:center;}.ring{margin:0 auto;width:180px;height:180px;}.nlinks{display:none;}.pgrid{grid-template-columns:1fr;}}
-`;
-
       const WORDS = ["Fintech", "AI", "Growth"];
 
       function RotWord() {
         const [i, setI] = useState(0);
         const [vis, setVis] = useState(true);
         useEffect(() => {
-          const t = setInterval(() => {
+          let intervalId;
+          const doRotation = () => {
             setVis(false);
             setTimeout(() => {
               setI((x) => (x + 1) % WORDS.length);
               setVis(true);
             }, 380);
+          };
+          const first = setTimeout(() => {
+            doRotation();
+            intervalId = setInterval(doRotation, 2400);
           }, 2600);
-          return () => clearInterval(t);
+          return () => {
+            clearTimeout(first);
+            if (intervalId) clearInterval(intervalId);
+          };
         }, []);
         return <span className={`rw grad ${vis ? "on" : "off"}`}>{WORDS[i]}</span>;
       }
 
-      function Nav({ page, go }) {
+      function scrollToSection(id) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+          window.history.replaceState(null, "", "#" + id);
+        }
+      }
+
+      function Nav({ activeSection, onNavigate }) {
+        const [mobileOpen, setMobileOpen] = useState(false);
+        const sections = [
+          { id: "home", label: "Home" },
+          { id: "building", label: "Building" },
+          { id: "chatbot", label: "Chatbot" },
+          { id: "resume", label: "Experience" },
+          { id: "posts", label: "Posts" },
+          { id: "contact", label: "Contact" },
+        ];
+        const handleClick = (id) => {
+          onNavigate(id);
+          scrollToSection(id);
+          setMobileOpen(false);
+        };
         return (
-          <nav>
-            <div className="nlogo" onClick={() => go("home")}>
-              Nathan Hamilton
-            </div>
-            <ul className="nlinks">
-              {["home", "building", "posts"].map((p) => (
-                <li
-                  key={p}
-                  className={`nl ${page === p ? "on" : ""}`}
-                  onClick={() => go(p)}
+          <header style={{ position: "relative" }}>
+            <nav>
+              <div
+                className="nlogo"
+                onClick={() => handleClick("home")}
+                tabIndex={0}
+                role="button"
+                onKeyDown={(e) => e.key === "Enter" && handleClick("home")}
+                style={{ cursor: "pointer" }}
+              >
+                Nathan Hamilton
+              </div>
+              <ul className="nlinks">
+                {sections.map(({ id, label }) => (
+                  <li
+                    key={id}
+                    className={`nl ${activeSection === id ? "on" : ""}`}
+                    onClick={() => handleClick(id)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {label}
+                  </li>
+                ))}
+              </ul>
+              <button
+                className="nav-toggle"
+                aria-expanded={mobileOpen}
+                aria-label="Toggle menu"
+                onClick={() => setMobileOpen(!mobileOpen)}
+              >
+                <span />
+                <span />
+                <span />
+              </button>
+              <div className={`nav-dropdown ${mobileOpen ? "open" : ""}`}>
+              {sections.map(({ id, label }) => (
+                <div
+                  key={id}
+                  className={`nl ${activeSection === id ? "on" : ""}`}
+                  onClick={() => handleClick(id)}
+                  style={{ cursor: "pointer" }}
                 >
-                  {p[0].toUpperCase() + p.slice(1)}
-                </li>
+                  {label}
+                </div>
               ))}
-            </ul>
-          </nav>
+              </div>
+            </nav>
+          </header>
+        );
+      }
+
+      function CopyEmailButton() {
+        const [copied, setCopied] = useState(false);
+        const copy = () => {
+          navigator.clipboard.writeText("nathanhamilton82@gmail.com")
+            .then(() => {
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+            })
+            .catch(() => {});
+        };
+        return (
+          <button
+            type="button"
+            className={`copy-btn ${copied ? "copied" : ""}`}
+            onClick={copy}
+            aria-label={copied ? "Copied" : "Copy email"}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              {copied ? (
+                <path d="M20 6L9 17l-5-5" />
+              ) : (
+                <>
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </>
+              )}
+            </svg>
+          </button>
         );
       }
 
@@ -120,7 +172,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdro
               >
                 LinkedIn ↗
               </a>
-              <a className="fl" href="#" target="_blank" rel="noreferrer">
+              <a
+                className="fl"
+                href="https://github.com/itsnathanham"
+                target="_blank"
+                rel="noreferrer"
+              >
                 GitHub ↗
               </a>
             </div>
@@ -128,11 +185,27 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdro
         );
       }
 
-      function Home({ go }) {
+      const POSTS_DATA = [
+        {
+          title: "7 Lessons I Learned Turning Around SaaS Products",
+          source: "Article",
+          desc: "A retro on acquiring and turning around Dividend Watch — user proximity, onboarding over growth, power users vs. North Star, and the lessons that matter when revenue is bleeding.",
+          link: "https://www.linkedin.com/pulse/7-lessons-i-learned-turning-around-saas-product-nathan-hamilton-alpsc/",
+        },
+        {
+          title: "My Daily AI Product Toolkit",
+          source: "Article",
+          desc: "ChatGPT, Gemini, Claude, Cursor, Perplexity — how I use AI day to day to ship product, run growth experiments, and produce content without adding headcount.",
+          link: "https://www.linkedin.com/pulse/my-daily-ai-product-management-toolkit-nathan-hamilton-qji9c/",
+        },
+      ];
+
+      function SinglePage() {
         return (
-          <div className="page">
-            <div className="wrap wrap-hero">
-              <div className="hgrid">
+          <main className="page">
+            <section id="home" className="section-anchor">
+              <div className="wrap wrap-hero">
+                <div className="hgrid">
                 <div>
                   <h1
                     style={{
@@ -168,9 +241,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdro
                     year. Equally comfortable with 0 to 1 vision, 1→100 scale, and
                     the full-stack product work in between.
                   </p>
-                  <a href="#chatbot" className="btn-p">
-                    Get to know me with AI ✦
-                  </a>
+                  <div className="hero-cta">
+                    <a href="#chatbot" className="btn-p">
+                      Get to Know My Product Work with AI ✦
+                    </a>
+                  </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <div className="ring" aria-hidden="true">
@@ -178,6 +253,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdro
                       <img
                         src="assets/profile.png"
                         alt="Nathan Hamilton"
+                        loading="lazy"
                         style={{ width: "100%", height: "100%", objectFit: "cover" }}
                       />
                     </div>
@@ -185,15 +261,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdro
                 </div>
               </div>
             </div>
+            </section>
 
-            <div className="strip">
+            <div id="building" className="strip section-anchor">
               <div className="wrap">
                 <h2 className="sh">Currently Building</h2>
                 <div className="pgrid">
                   {[
                     {
                       title: "Dividend Watch",
-                      desc: "B2C investing analytics SaaS — portfolio tracking, dividend forecasting, and alerts for 39,000 active users.",
+                      desc: "Executing a product-led turnaround for a B2C investing analytics SaaS with 39,000 users.",
                       tags: [
                         "Cursor",
                         "Claude",
@@ -201,335 +278,321 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:#0A0A0Fdd;backdro
                         "39K Users",
                         "Product-led growth",
                       ],
+                      link: "https://dividend.watch/",
                     },
                     {
-                      title: "Chore Tracker App",
-                      desc: "A household chore tracking app built as a personal project — full product lifecycle from concept to launch.",
-                      tags: ["Cursor", "Claude", "Figma", "Personal Project"],
+                      title: "Chore Tracker App (in progress)",
+                      desc: "Full product lifecycle kids chore tracking app with streak mechanics and genAI.",
+                      tags: ["Cursor", "Claude", "Figma", "Personal Project", "genAI assistant"],
+                      link: "https://github.com/itsnathanham",
                     },
                     {
-                      title: "Golf Analytics App",
-                      desc: "Tracking rounds, handicap trends, and performance insights — built with AI-assisted workflows.",
-                      tags: ["Cursor", "Claude", "Figma", "Personal Project"],
+                      title: "Golf Analytics App (in progress)",
+                      desc: "Tracking rounds, handicap trends, and performance insights, genAI coaching assistant.",
+                      tags: ["Cursor", "Claude", "Figma", "Personal Project", "genAI assistant"],
+                      link: "https://github.com/itsnathanham",
                     },
                     {
                       title: "Job Search Agent",
-                      desc: "An AI agent that helps run a job search — researching roles, tracking leads, and automating outreach workflows.",
+                      desc: "A custom AI agent that pulls from company job boards and synthesizes career insights in my Airtable workflow.",
                       tags: ["Zapier Agent", "Sonnet 4.6", "Airtable"],
+                      link: null,
                     },
                     {
                       title: "This Website",
                       desc: "A fast, clean personal website built and iterated with AI-assisted workflows.",
                       tags: ["Claude Code", "Cursor"],
+                      link: null,
                     },
-                  ].map((p) => (
-                    <div className="card" key={p.title} style={{ padding: 0 }}>
-                      <div className="accent-bar" />
-                      <div style={{ padding: "18px 22px 22px" }}>
-                        <h3
+                  ].map((p) => {
+                    const cardContent = (
+                      <>
+                        <div className="accent-bar" />
+                        <div style={{ padding: "18px 22px 22px" }}>
+                          <h3
+                            style={{
+                              fontFamily: "'Syne',sans-serif",
+                              fontWeight: 700,
+                              fontSize: 16,
+                              marginBottom: 8,
+                              color: "#F0F0F5",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 6,
+                            }}
+                          >
+                            {p.title}
+                            {p.link && <span style={{ fontSize: 12, opacity: 0.8 }}>↗</span>}
+                          </h3>
+                          <p
+                            style={{
+                              fontSize: 13,
+                              color: "#8888A0",
+                              lineHeight: 1.65,
+                              marginBottom: 14,
+                              fontFamily: "'DM Sans',sans-serif",
+                            }}
+                          >
+                            {p.desc}
+                          </p>
+                          <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
+                            {p.tags.map((t) => (
+                              <span key={t} className="tag">
+                                {t}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </>
+                    );
+                    return p.link ? (
+                      <a
+                        key={p.title}
+                        href={p.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="card building-card"
+                        style={{ padding: 0, textDecoration: "none", color: "inherit", display: "block" }}
+                      >
+                        {cardContent}
+                      </a>
+                    ) : (
+                      <div key={p.title} className="card building-card" style={{ padding: 0 }}>
+                        {cardContent}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <div id="chatbot" className="section-anchor">
+              <div className="strip">
+                <div className="wrap">
+                  <h2 className="sh">Nathan PM Chatbot</h2>
+                  <div className="wrap-sm" style={{ paddingTop: 0, paddingBottom: 48 }}>
+                    <div className="chat-box">
+                      <h2
+                        style={{
+                          fontFamily: "'Syne',sans-serif",
+                          fontSize: 22,
+                          fontWeight: 700,
+                          marginBottom: 12,
+                        }}
+                        className="grad"
+                      >
+                        Ask me anything
+                      </h2>
+                      <p
+                        style={{
+                          fontSize: 14,
+                          color: "#8888A0",
+                          lineHeight: 1.7,
+                          maxWidth: 400,
+                          margin: "0 auto 22px",
+                          fontFamily: "'DM Sans',sans-serif",
+                        }}
+                      >
+                        An AI version of me is coming here soon — powered by my work
+                        history, writing, and experience. Until then, reach out
+                        directly.
+                      </p>
+                      {/* TODO: Replace with Zapier chatbot embed */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="resume" className="section-anchor">
+              <div className="strip">
+                <div className="wrap">
+                  <h2 className="sh">Experience</h2>
+                  <div style={{ marginBottom: 24 }}>
+                    <a href="assets/resume.pdf" className="btn-g" target="_blank" rel="noreferrer" download="Nathan Hamilton PM Resume.pdf">
+                      Download Full PDF Resume
+                    </a>
+                  </div>
+                  <article className="resume-content">
+                    <section className="resume-block">
+                      <div className="resume-item">
+                        <div className="resume-item-header">
+                          <span className="resume-title">Head of Product & Growth</span>
+                          <span className="resume-meta">Dividend Watch (NH82 Media) • 2022 – Present</span>
+                        </div>
+                      </div>
+                      <div className="resume-timeline">
+                        <div className="resume-timeline-item">
+                          <div className="resume-item-header">
+                            <span className="resume-title">Director, Product & Growth</span>
+                            <span className="resume-meta">Motley Fool • 2016 – 2022</span>
+                          </div>
+                        </div>
+                        <div className="resume-timeline-item">
+                          <div className="resume-item-header">
+                            <span className="resume-title">Director, International Growth Marketing</span>
+                            <span className="resume-meta">Motley Fool • 2016</span>
+                          </div>
+                        </div>
+                        <div className="resume-timeline-item">
+                          <div className="resume-item-header">
+                            <span className="resume-title">Performance Marketing Manager</span>
+                            <span className="resume-meta">Motley Fool • 2015 – 2016</span>
+                          </div>
+                        </div>
+                        <div className="resume-timeline-item">
+                          <div className="resume-item-header">
+                            <span className="resume-title">Editorial Lead</span>
+                            <span className="resume-meta">Motley Fool • 2014</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="resume-item">
+                        <div className="resume-item-header">
+                          <span className="resume-title">Equity Research Intern</span>
+                          <span className="resume-meta">Tamro Capital • 2013</span>
+                        </div>
+                      </div>
+                      <div className="resume-item">
+                        <div className="resume-item-header">
+                          <span className="resume-title">Hedge Fund Research Analyst</span>
+                          <span className="resume-meta">Smithsonian Endowment • 2013</span>
+                        </div>
+                      </div>
+                      <div className="resume-item">
+                        <div className="resume-item-header">
+                          <span className="resume-title">Sr. Specialist, Equities & Options</span>
+                          <span className="resume-meta">Charles Schwab • 2008 – 2011</span>
+                        </div>
+                      </div>
+                    </section>
+                  </article>
+                </div>
+              </div>
+            </div>
+
+            <div id="posts" className="section-anchor">
+              <div className="strip">
+                <div className="wrap">
+                  <h2 className="sh">Recent Posts</h2>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    {POSTS_DATA.map((p) => (
+                      <div className="card" key={p.title} style={{ padding: "22px 26px" }}>
+                        <div
                           style={{
-                            fontFamily: "'Syne',sans-serif",
-                            fontWeight: 700,
-                            fontSize: 16,
-                            marginBottom: 8,
-                            color: "#F0F0F5",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                            flexWrap: "wrap",
+                            gap: 8,
+                            marginBottom: 10,
                           }}
                         >
-                          {p.title}
-                        </h3>
+                          <h3
+                            style={{
+                              fontFamily: "'Syne',sans-serif",
+                              fontWeight: 600,
+                              fontSize: 16,
+                              color: "#F0F0F5",
+                              maxWidth: 520,
+                            }}
+                          >
+                            {p.title}
+                          </h3>
+                          <span
+                            className={`tag ${p.source === "LinkedIn" ? "source-li" : "source-ar"}`}
+                          >
+                            {p.source}
+                          </span>
+                        </div>
                         <p
                           style={{
                             fontSize: 13,
                             color: "#8888A0",
                             lineHeight: 1.65,
-                            marginBottom: 14,
                             fontFamily: "'DM Sans',sans-serif",
+                            marginBottom: 12,
                           }}
                         >
                           {p.desc}
                         </p>
-                        <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                          {p.tags.map((t) => (
-                            <span key={t} className="tag">
-                              {t}
-                            </span>
-                          ))}
-                        </div>
+                        <a href={p.link} className="rmore" target="_blank" rel="noreferrer">
+                          Read more ↗
+                        </a>
                       </div>
-                    </div>
-                  ))}
-                </div>
-                <button className="btn-g" onClick={() => go("building")}>
-                  → Learn more about what I'm building
-                </button>
-              </div>
-            </div>
-
-            <div className="wrap-sm" id="chatbot">
-              <div className="chat-box">
-                <h2
-                  style={{
-                    fontFamily: "'Syne',sans-serif",
-                    fontSize: 22,
-                    fontWeight: 700,
-                    marginBottom: 12,
-                  }}
-                  className="grad"
-                >
-                  Ask me anything
-                </h2>
-                <p
-                  style={{
-                    fontSize: 14,
-                    color: "#8888A0",
-                    lineHeight: 1.7,
-                    maxWidth: 400,
-                    margin: "0 auto 22px",
-                    fontFamily: "'DM Sans',sans-serif",
-                  }}
-                >
-                  An AI version of me is coming here soon — powered by my work
-                  history, writing, and experience. Until then, reach out
-                  directly.
-                </p>
-                {/* TODO: Replace with Zapier chatbot embed */}
-                <a href="#" className="btn-g">
-                  → Connect on LinkedIn
-                </a>
-              </div>
-            </div>
-
-            <Footer />
-          </div>
-        );
-      }
-
-      function Building() {
-        const projects = [
-          {
-            title: "Dividend Watch",
-            sub: "B2C Investing Analytics SaaS",
-            tags: ["Cursor", "Claude", "Figma", "39K Users", "Product-led growth"],
-            body: "Dividend Watch is an investing analytics platform I acquired and turned around after it was struggling. I rebuilt the product strategy, redesigned core features, and built out the growth systems. The result: 43% ARR growth, churn reduced from 11% to 5%, and trial-to-paid conversion improved from 28% to 73%. It now serves 39,000 users.",
-            link: "Visit Dividend Watch →",
-          },
-          {
-            title: "Chore Tracker App",
-            sub: "Personal Project — Household Management App",
-            tags: ["Cursor", "Claude", "Figma", "Personal Project"],
-            body: "A full-stack personal project built to scratch my own itch — a simple, clean app for tracking household chores across multiple people. Built end-to-end using Cursor and Claude for engineering, Figma for design. An exercise in shipping real product fast with modern AI-assisted workflows.",
-            link: "View on GitHub →",
-          },
-          {
-            title: "Golf Analytics App",
-            sub: "Personal Project — Performance Tracking for Golfers",
-            tags: ["Cursor", "Claude", "Figma", "Personal Project"],
-            body: "A personal project that tracks rounds, visualizes handicap trends, and surfaces patterns in my game. Built as a real product — not just a side script — with a proper UI and data model. Another experiment in AI-assisted product building, and genuinely useful for any serious golfer.",
-            link: "View on GitHub →",
-          },
-          {
-            title: "Job Search Agent",
-            sub: "Automation + Research Agent",
-            tags: ["Zapier Agent", "Sonnet 4.6", "Airtable"],
-            body: "A job-search copilot that helps identify roles, keep an Airtable pipeline up to date, and automate repeatable workflows across applications and outreach.",
-            link: "See details →",
-          },
-          {
-            title: "This Website",
-            sub: "Personal Site",
-            tags: ["Claude Code", "Cursor"],
-            body: "This site, built with a focus on clean design, speed, and rapid iteration using modern AI-assisted tooling.",
-            link: "View source →",
-          },
-        ];
-        return (
-          <div className="page">
-            <div className="wrap">
-              <h1 className="pt grad">What I'm Building</h1>
-              <p className="ps">
-                A mix of professional work and personal projects — all built
-                with real product thinking.
-              </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                {projects.map((p) => (
-                  <div className="card" key={p.title} style={{ padding: 0 }}>
-                    <div className="accent-bar" />
-                    <div style={{ padding: "26px 30px 30px" }}>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "flex-start",
-                          flexWrap: "wrap",
-                          gap: 12,
-                          marginBottom: 12,
-                        }}
-                      >
-                        <div>
-                          <h3
-                            style={{
-                              fontFamily: "'Syne',sans-serif",
-                              fontWeight: 700,
-                              fontSize: 19,
-                              color: "#F0F0F5",
-                              marginBottom: 4,
-                            }}
-                          >
-                            {p.title}
-                          </h3>
-                          <p
-                            style={{
-                              fontSize: 12,
-                              color: "#555570",
-                              fontFamily: "'DM Sans',sans-serif",
-                            }}
-                          >
-                            {p.sub}
-                          </p>
-                        </div>
-                        <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-                          {p.tags.map((t) => (
-                            <span key={t} className="tag">
-                              {t}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      <p
-                        style={{
-                          fontSize: 14,
-                          color: "#8888A0",
-                          lineHeight: 1.75,
-                          fontFamily: "'DM Sans',sans-serif",
-                          marginBottom: 18,
-                          maxWidth: 640,
-                        }}
-                      >
-                        {p.body}
-                      </p>
-                      <a href="#" className="rmore">
-                        {p.link}
-                      </a>
-                    </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
             </div>
-            <Footer />
-          </div>
-        );
-      }
 
-      function Posts() {
-        const posts = [
-          {
-            title: "What I Learned Scaling a Fintech Product Line to $100M",
-            source: "LinkedIn",
-            date: "January 2025",
-            desc: "Placeholder — Add your LinkedIn post summary here. Describe the key insight or story from the post in 2–3 sentences.",
-          },
-          {
-            title: "How I Turned Around a Struggling SaaS in 18 Months",
-            source: "Article",
-            date: "November 2024",
-            desc: "Placeholder — Add article summary here. Cover the core narrative and what readers take away from the piece.",
-          },
-          {
-            title: "Building with AI: What Product Managers Need to Know",
-            source: "LinkedIn",
-            date: "September 2024",
-            desc: "Placeholder — Add your LinkedIn post summary here. Share the key perspective or framework from this post.",
-          },
-          {
-            title: "Why Churn Is a Product Problem, Not a Marketing One",
-            source: "Article",
-            date: "July 2024",
-            desc: "Placeholder — Add article summary here. Outline the main argument and what makes this perspective unique.",
-          },
-        ];
-        return (
-          <div className="page">
-            <div className="wrap">
-              <h1 className="pt grad">Writing & Thinking</h1>
-              <p className="ps">Notes on product, fintech, growth, and building.</p>
-              <div style={{ marginBottom: 36 }}>
-                <a href="#" className="btn-g">
-                  View my GitHub →
-                </a>
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {posts.map((p) => (
-                  <div className="card" key={p.title} style={{ padding: "22px 26px" }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "flex-start",
-                        flexWrap: "wrap",
-                        gap: 8,
-                        marginBottom: 10,
-                      }}
+            <div id="contact" className="section-anchor">
+              <div className="strip">
+                <div className="wrap">
+                  <h2 className="sh">Contact</h2>
+                  <p
+                    style={{
+                      fontSize: 16,
+                      color: "#8888A0",
+                      lineHeight: 1.7,
+                      fontFamily: "'DM Sans',sans-serif",
+                      marginBottom: 16,
+                    }}
+                  >
+                    Reach out anytime.
+                  </p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 20, alignItems: "center" }}>
+                    <a
+                      href="mailto:nathanhamilton82@gmail.com"
+                      className="fl"
+                      style={{ fontSize: 16 }}
                     >
-                      <h3
-                        style={{
-                          fontFamily: "'Syne',sans-serif",
-                          fontWeight: 600,
-                          fontSize: 16,
-                          color: "#F0F0F5",
-                          maxWidth: 520,
-                        }}
-                      >
-                        {p.title}
-                      </h3>
-                      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                        <span
-                          className={`tag ${p.source === "LinkedIn" ? "source-li" : "source-ar"}`}
-                        >
-                          {p.source}
-                        </span>
-                        <span
-                          style={{
-                            fontSize: 12,
-                            color: "#555570",
-                            fontFamily: "'DM Sans',sans-serif",
-                          }}
-                        >
-                          {p.date}
-                        </span>
-                      </div>
-                    </div>
-                    <p
-                      style={{
-                        fontSize: 13,
-                        color: "#8888A0",
-                        lineHeight: 1.65,
-                        fontFamily: "'DM Sans',sans-serif",
-                        marginBottom: 12,
-                      }}
+                      nathanhamilton82@gmail.com
+                    </a>
+                    <CopyEmailButton />
+                    <a
+                      href="https://www.linkedin.com/in/nathan-hamilton-8492456/"
+                      className="fl"
+                      style={{ fontSize: 16 }}
+                      target="_blank"
+                      rel="noreferrer"
                     >
-                      {p.desc}
-                    </p>
-                    <a href="#" className="rmore">
-                      Read more →
+                      LinkedIn ↗
+                    </a>
+                    <a
+                      href="https://github.com/itsnathanham"
+                      className="fl"
+                      style={{ fontSize: 16 }}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      GitHub ↗
                     </a>
                   </div>
-                ))}
+                </div>
               </div>
             </div>
+
             <Footer />
-          </div>
+          </main>
         );
       }
 
       function App() {
-        const [page, setPage] = useState("home");
+        const [activeSection, setActiveSection] = useState(
+          () => (typeof window !== "undefined" && window.location.hash.slice(1)) || "home"
+        );
+        useEffect(() => {
+          const onHash = () => setActiveSection(window.location.hash.slice(1) || "home");
+          window.addEventListener("hashchange", onHash);
+          const hash = window.location.hash.slice(1);
+          if (hash) setTimeout(() => scrollToSection(hash), 0);
+          return () => window.removeEventListener("hashchange", onHash);
+        }, []);
         return (
           <>
-            <style>{css}</style>
-            <Nav page={page} go={setPage} />
-            {page === "home" && <Home go={setPage} />}
-            {page === "building" && <Building />}
-            {page === "posts" && <Posts />}
+            <Nav activeSection={activeSection} onNavigate={setActiveSection} />
+            <SinglePage />
           </>
         );
       }
