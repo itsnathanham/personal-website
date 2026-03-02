@@ -33,8 +33,8 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: #0A0
 .pgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 28px; }
 .source-li { background: #1a2744; color: #3B82F6; }
 .source-ar { background: #1a2d1f; color: #6EE7B7; }
-.rmore { color: #6EE7B7; font-size: 14px; cursor: pointer; text-decoration: none; font-family: 'DM Sans', sans-serif; }
-.rmore:hover { text-decoration: underline; }
+.rmore { color: #555570; font-size: 14px; cursor: pointer; text-decoration: none; font-family: 'DM Sans', sans-serif; transition: color .2s; }
+.rmore:hover { color: #6EE7B7; }
 .pt { font-family: 'Syne', sans-serif; font-size: clamp(36px, 5vw, 54px); font-weight: 800; line-height: 1.1; margin-bottom: 18px; }
 .ps { font-size: 16px; color: #8888A0; line-height: 1.75; font-family: 'DM Sans', sans-serif; max-width: 520px; margin-bottom: 28px; }
 .rw { display: inline-block; transition: opacity .35s ease, transform .35s ease; }
@@ -96,6 +96,7 @@ a:focus-visible, button:focus-visible, .nl:focus-visible, .nlogo:focus-visible {
   .nlinks { display: none; }
   .pgrid { grid-template-columns: 1fr; }
   #home .wrap-hero, #home .hgrid, #home .hgrid > div:first-child { text-align: left; }
+  #home .hero-cta { text-align: center; }
   .nav-toggle { display: flex; }
 }
 

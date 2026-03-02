@@ -33,14 +33,22 @@
         const [i, setI] = useState(0);
         const [vis, setVis] = useState(true);
         useEffect(() => {
-          const t = setInterval(() => {
+          let intervalId;
+          const doRotation = () => {
             setVis(false);
             setTimeout(() => {
               setI((x) => (x + 1) % WORDS.length);
               setVis(true);
             }, 380);
-          }, 2600);
-          return () => clearInterval(t);
+          };
+          const first = setTimeout(() => {
+            doRotation();
+            intervalId = setInterval(doRotation, 2300);
+          }, 800);
+          return () => {
+            clearTimeout(first);
+            if (intervalId) clearInterval(intervalId);
+          };
         }, []);
         return <span className={`rw grad ${vis ? "on" : "off"}`}>{WORDS[i]}</span>;
       }
@@ -233,9 +241,11 @@
                     year. Equally comfortable with 0 to 1 vision, 1→100 scale, and
                     the full-stack product work in between.
                   </p>
-                  <a href="#chatbot" className="btn-p">
-                    Get to know me with AI ✦
-                  </a>
+                  <div className="hero-cta">
+                    <a href="#chatbot" className="btn-p">
+                      Get to know me with AI ✦
+                    </a>
+                  </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <div className="ring" aria-hidden="true">
@@ -388,9 +398,6 @@
                         directly.
                       </p>
                       {/* TODO: Replace with Zapier chatbot embed */}
-                      <a href="https://www.linkedin.com/in/nathan-hamilton-8492456/" className="btn-g" target="_blank" rel="noreferrer">
-                        → Connect on LinkedIn
-                      </a>
                     </div>
                   </div>
                 </div>
