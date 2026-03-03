@@ -374,7 +374,7 @@ nav {
   line-height: 1.75;
   color: var(--text-muted);
   max-width: 640px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 /* Photo frame - warm slate style */
