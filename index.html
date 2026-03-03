@@ -22,6 +22,7 @@
 
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script type="text/babel" data-presets="react">
@@ -234,7 +235,14 @@
               <div className="chat-messages" ref={messagesContainerRef}>
                 {messages.map((msg, i) => (
                   <div key={i} className={`chat-msg chat-msg-${msg.role}`}>
-                    <div className="chat-msg-content">{msg.content || (msg.role === "assistant" && isLoading ? "..." : "")}</div>
+                    {msg.role === "assistant" && msg.content ? (
+                      <div
+                        className="chat-msg-content chat-msg-content-md"
+                        dangerouslySetInnerHTML={{ __html: (typeof marked !== "undefined" ? marked.parse(msg.content) : msg.content) }}
+                      />
+                    ) : (
+                      <div className="chat-msg-content">{msg.content || (msg.role === "assistant" && isLoading ? "..." : "")}</div>
+                    )}
                   </div>
                 ))}
               </div>

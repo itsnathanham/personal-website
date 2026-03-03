@@ -231,6 +231,48 @@ nav {
   white-space: pre-wrap;
 }
 
+.chat-msg-assistant .chat-msg-content-md {
+  display: block;
+  white-space: normal;
+}
+
+.chat-msg-content-md h2 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 16px 0 8px;
+}
+
+.chat-msg-content-md h2:first-child { margin-top: 0; }
+
+.chat-msg-content-md p {
+  margin: 0 0 10px;
+  line-height: 1.65;
+}
+
+.chat-msg-content-md p:last-child { margin-bottom: 0; }
+
+.chat-msg-content-md ul {
+  margin: 8px 0 12px;
+  padding-left: 20px;
+}
+
+.chat-msg-content-md li {
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+.chat-msg-content-md strong {
+  font-weight: 600;
+}
+
+.chat-msg-content-md hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+
 .chat-input-wrap {
   display: flex;
   gap: 12px;
