@@ -128,10 +128,11 @@
         const [messages, setMessages] = useState([]);
         const [input, setInput] = useState("");
         const [isLoading, setIsLoading] = useState(false);
-        const messagesEndRef = useRef(null);
+        const messagesContainerRef = useRef(null);
 
         const scrollToBottom = () => {
-          messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+          const el = messagesContainerRef.current;
+          if (el) el.scrollTop = el.scrollHeight;
         };
         useEffect(scrollToBottom, [messages]);
 
@@ -230,13 +231,12 @@
                 <p className="chat-disclaimer">AI may contain mistakes. Reach out to Nathan for full details</p>
               </div>
             ) : (
-              <div className="chat-messages">
+              <div className="chat-messages" ref={messagesContainerRef}>
                 {messages.map((msg, i) => (
                   <div key={i} className={`chat-msg chat-msg-${msg.role}`}>
                     <div className="chat-msg-content">{msg.content || (msg.role === "assistant" && isLoading ? "..." : "")}</div>
                   </div>
                 ))}
-                <div ref={messagesEndRef} />
               </div>
             )}
             <div className="chat-input-wrap">
