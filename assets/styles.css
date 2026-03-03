@@ -162,7 +162,7 @@ nav {
 
 .hgrid {
   display: grid;
-  grid-template-columns: 1fr 260px;
+  grid-template-columns: 1fr 280px;
   gap: 60px;
   align-items: center;
 }
@@ -206,14 +206,14 @@ nav {
   font-size: 16px;
   line-height: 1.75;
   color: var(--text-muted);
-  max-width: 560px;
+  max-width: 640px;
   margin-bottom: 36px;
 }
 
 /* Photo frame - warm slate style */
 .ring {
-  width: 200px;
-  height: 200px;
+  width: 240px;
+  height: 240px;
   border-radius: 50%;
   overflow: hidden;
   border: 4px solid var(--surface);
@@ -501,7 +501,7 @@ button:focus-visible,
   .wrap { padding: 64px 32px; }
   .wrap-hero { padding: 56px 32px; }
   .hgrid { grid-template-columns: 1fr; gap: 36px; text-align: left; }
-  .ring { margin: 0 auto; width: 180px; height: 180px; }
+  .ring { margin: 0 auto; width: 220px; height: 220px; }
   .nlinks { display: none; }
   .pgrid { grid-template-columns: 1fr; }
   #home .wrap-hero,
