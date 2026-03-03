@@ -65,9 +65,9 @@
         const [mobileOpen, setMobileOpen] = useState(false);
         const sections = [
           { id: "home", label: "Home" },
+          { id: "resume", label: "Experience" },
           { id: "building", label: "Building" },
           { id: "chatbot", label: "Chatbot" },
-          { id: "resume", label: "Experience" },
           { id: "posts", label: "Posts" },
           { id: "contact", label: "Contact" },
         ];
@@ -238,7 +238,7 @@
                     a product-led turnaround to improve customer trust,
                     activation, retention, and monetization (119% LTV increase,
                     11% to 5% churn, 28% to 73% trial conversion) in under a
-                    year. Equally comfortable with 0 to 1 vision, 1→100 scale, and
+                    year. Equally comfortable with 0 to 1 vision, 1 to 100 scale, and
                     the full-stack product work in between.
                   </p>
                   <div className="hero-cta">
@@ -263,6 +263,86 @@
             </div>
             </section>
 
+            <div id="resume" className="section-anchor">
+              <div className="strip">
+                <div className="wrap">
+                  <h2 className="sh">Experience</h2>
+                  <div style={{ marginBottom: 24 }}>
+                    <a href="assets/resume.docx" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "#6EE7B7", textDecoration: "none", fontFamily: "'DM Sans', sans-serif", fontSize: 14 }} target="_blank" rel="noreferrer" download="Nathan Hamilton Resume PM.docx">
+                      Download PDF Resume
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                    </a>
+                  </div>
+                  <article className="resume-content">
+                    <section className="resume-block">
+                      <div className="resume-item">
+                        <div className="resume-item-header">
+                          <span className="resume-title">Head of Product & Growth</span>
+                          <span className="resume-meta">Dividend Watch (NH82 Media) • 2022 – Present</span>
+                        </div>
+                        <p className="resume-desc">Acquired a struggling investing SaaS (1-star Trustpilot, drifting from ICP) and executed a full product-led turnaround, now consistently 5 stars, growing to 39,000 users, 119% LTV increase</p>
+                      </div>
+                      <div className="resume-timeline">
+                        <div className="resume-timeline-item">
+                          <div className="resume-item-header">
+                            <span className="resume-title">Director, Product & Growth</span>
+                            <span className="resume-meta">Motley Fool • 2016 – 2022</span>
+                          </div>
+                          <p className="resume-desc">Led product roadmap and SEO P&L for $100M+ finance marketplace product, managed and developed team of 20</p>
+                        </div>
+                        <div className="resume-timeline-item">
+                          <div className="resume-item-header">
+                            <span className="resume-title">Director, International Growth Marketing</span>
+                            <span className="resume-meta">Motley Fool • 2016</span>
+                          </div>
+                          <p className="resume-desc">Growth marketing spanning Canada, UK, Singapore, Germany, and Japan territories</p>
+                        </div>
+                        <div className="resume-timeline-item">
+                          <div className="resume-item-header">
+                            <span className="resume-title">Performance Marketing Manager</span>
+                            <span className="resume-meta">Motley Fool • 2015 – 2016</span>
+                          </div>
+                          <p className="resume-desc">Lifecycle marketing managing a $20M budget across SEM, social, display, email, and native sponsorship channels</p>
+                        </div>
+                        <div className="resume-timeline-item">
+                          <div className="resume-item-header">
+                            <span className="resume-title">Editorial Lead</span>
+                            <span className="resume-meta">Motley Fool • 2014</span>
+                          </div>
+                          <p className="resume-desc">Growth lead overseeing tech sector strategy, doubling revenue and traffic in 6 months</p>
+                        </div>
+                      </div>
+                      <div className="resume-item">
+                        <div className="resume-item-header">
+                          <span className="resume-title">Equity Research Intern</span>
+                          <span className="resume-meta">Tamro Capital • 2013</span>
+                        </div>
+                        <p className="resume-desc">Conducted fundamental equity research and built valuation models across technology, industrials, healthcare, and energy sectors for a $2.2B AUM mutual fund.</p>
+                      </div>
+                      <div className="resume-item">
+                        <div className="resume-item-header">
+                          <span className="resume-title">Hedge Fund Research Analyst</span>
+                          <span className="resume-meta">Smithsonian Endowment • 2013</span>
+                        </div>
+                        <p className="resume-desc">Performed quantitative and qualitative due diligence on hedge fund managers across long/short equity, global macro, and event-driven strategies for a $1.4B endowment portfolio.</p>
+                      </div>
+                      <div className="resume-item">
+                        <div className="resume-item-header">
+                          <span className="resume-title">Sr. Specialist, Equities & Options</span>
+                          <span className="resume-meta">Charles Schwab • 2008 – 2011</span>
+                        </div>
+                        <p className="resume-desc">Advised high-net-worth clients on equity and options strategies, ranking in the 94th percentile for performance, earning peer- and senior-leader-nominated awards for client service and teamwork.</p>
+                      </div>
+                    </section>
+                  </article>
+                </div>
+              </div>
+            </div>
+
             <div id="building" className="strip section-anchor">
               <div className="wrap">
                 <h2 className="sh">Currently Building</h2>
@@ -270,7 +350,7 @@
                   {[
                     {
                       title: "Dividend Watch",
-                      desc: "Executing a product-led turnaround for a B2C investing analytics SaaS.",
+                      desc: "Executing a product-led turnaround for a B2C investing analytics SaaS with 39,000 users.",
                       tags: [
                         "Cursor",
                         "Claude",
@@ -368,7 +448,7 @@
             <div id="chatbot" className="section-anchor">
               <div className="strip">
                 <div className="wrap">
-                  <h2 className="sh">Nathan PM Chatbot</h2>
+                  <h2 className="sh">Get to Know My Product Work with AI</h2>
                   <div className="wrap-sm" style={{ paddingTop: 0, paddingBottom: 48 }}>
                     <div className="chat-box">
                       <h2
@@ -399,73 +479,6 @@
                       {/* TODO: Replace with Zapier chatbot embed */}
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <div id="resume" className="section-anchor">
-              <div className="strip">
-                <div className="wrap">
-                  <h2 className="sh">Experience</h2>
-                  <div style={{ marginBottom: 24 }}>
-                    <a href="assets/resume.docx" className="btn-g" target="_blank" rel="noreferrer" download="Nathan Hamilton Resume PM.docx">
-                      Download Resume
-                    </a>
-                  </div>
-                  <article className="resume-content">
-                    <section className="resume-block">
-                      <div className="resume-item">
-                        <div className="resume-item-header">
-                          <span className="resume-title">Head of Product & Growth</span>
-                          <span className="resume-meta">Dividend Watch (NH82 Media) • 2022 – Present</span>
-                        </div>
-                      </div>
-                      <div className="resume-timeline">
-                        <div className="resume-timeline-item">
-                          <div className="resume-item-header">
-                            <span className="resume-title">Director, Product & Growth</span>
-                            <span className="resume-meta">Motley Fool • 2016 – 2022</span>
-                          </div>
-                        </div>
-                        <div className="resume-timeline-item">
-                          <div className="resume-item-header">
-                            <span className="resume-title">Director, International Growth Marketing</span>
-                            <span className="resume-meta">Motley Fool • 2016</span>
-                          </div>
-                        </div>
-                        <div className="resume-timeline-item">
-                          <div className="resume-item-header">
-                            <span className="resume-title">Performance Marketing Manager</span>
-                            <span className="resume-meta">Motley Fool • 2015 – 2016</span>
-                          </div>
-                        </div>
-                        <div className="resume-timeline-item">
-                          <div className="resume-item-header">
-                            <span className="resume-title">Editorial Lead</span>
-                            <span className="resume-meta">Motley Fool • 2014</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="resume-item">
-                        <div className="resume-item-header">
-                          <span className="resume-title">Equity Research Intern</span>
-                          <span className="resume-meta">Tamro Capital • 2013</span>
-                        </div>
-                      </div>
-                      <div className="resume-item">
-                        <div className="resume-item-header">
-                          <span className="resume-title">Hedge Fund Research Analyst</span>
-                          <span className="resume-meta">Smithsonian Endowment • 2013</span>
-                        </div>
-                      </div>
-                      <div className="resume-item">
-                        <div className="resume-item-header">
-                          <span className="resume-title">Sr. Specialist, Equities & Options</span>
-                          <span className="resume-meta">Charles Schwab • 2008 – 2011</span>
-                        </div>
-                      </div>
-                    </section>
-                  </article>
                 </div>
               </div>
             </div>
@@ -554,14 +567,16 @@
                     Reach out anytime.
                   </p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 20, alignItems: "center" }}>
-                    <a
-                      href="mailto:nathanhamilton82@gmail.com"
-                      className="fl"
-                      style={{ fontSize: 16 }}
-                    >
-                      nathanhamilton82@gmail.com
-                    </a>
-                    <CopyEmailButton />
+                    <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <a
+                        href="mailto:nathanhamilton82@gmail.com"
+                        className="fl"
+                        style={{ fontSize: 16 }}
+                      >
+                        nathanhamilton82@gmail.com
+                      </a>
+                      <CopyEmailButton />
+                    </span>
                     <a
                       href="https://www.linkedin.com/in/nathan-hamilton-8492456/"
                       className="fl"
