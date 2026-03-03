@@ -273,6 +273,24 @@ nav {
   margin: 16px 0;
 }
 
+.chat-stream-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--accent);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: chat-cursor-blink 1s step-end infinite;
+}
+
+@keyframes chat-cursor-blink {
+  50% { opacity: 0; }
+}
+
+.chat-msg-streaming {
+  transition: opacity 0.15s ease;
+}
+
 .chat-input-wrap {
   display: flex;
   gap: 12px;
@@ -637,6 +655,7 @@ button:focus-visible,
     min-height: 48px;
     padding: 14px 20px;
     font-size: 16px;
+    justify-content: center;
   }
 
   nav { padding: 22px 32px; }
@@ -663,4 +682,5 @@ button:focus-visible,
     transition-duration: 0.01ms !important;
   }
   .rw { transition: none; }
+  .chat-stream-cursor { animation: none; opacity: 1; }
 }

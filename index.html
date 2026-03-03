@@ -130,12 +130,29 @@
         const [input, setInput] = useState("");
         const [isLoading, setIsLoading] = useState(false);
         const messagesContainerRef = useRef(null);
+        const streamBufferRef = useRef("");
+        const rafRef = useRef(null);
 
         const scrollToBottom = () => {
           const el = messagesContainerRef.current;
           if (el) el.scrollTop = el.scrollHeight;
         };
         useEffect(scrollToBottom, [messages]);
+
+        const flushStream = () => {
+          if (streamBufferRef.current === "") return;
+          const text = streamBufferRef.current;
+          streamBufferRef.current = "";
+          setMessages((m) => {
+            const next = [...m];
+            const last = next[next.length - 1];
+            if (last?.role === "assistant") {
+              next[next.length - 1] = { ...last, content: last.content + text };
+            }
+            return next;
+          });
+          rafRef.current = null;
+        };
 
         const sendMessage = async (text) => {
           const trimmed = (text || input).trim();
@@ -173,14 +190,12 @@
                   try {
                     const data = JSON.parse(line.slice(6));
                     if (data.type === "text" && data.text) {
-                      setMessages((m) => {
-                        const next = [...m];
-                        const last = next[next.length - 1];
-                        if (last?.role === "assistant") {
-                          next[next.length - 1] = { ...last, content: last.content + data.text };
-                        }
-                        return next;
-                      });
+                      streamBufferRef.current += data.text;
+                      if (!rafRef.current) {
+                        rafRef.current = requestAnimationFrame(() => {
+                          flushStream();
+                        });
+                      }
                     } else if (data.type === "error") {
                       setMessages((m) => {
                         const next = [...m];
@@ -205,6 +220,8 @@
               return next;
             });
           } finally {
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+            flushStream();
             setIsLoading(false);
           }
         };
@@ -233,12 +250,15 @@
                 {messages.map((msg, i) => (
                   <div key={i} className={`chat-msg chat-msg-${msg.role}`}>
                     {msg.role === "assistant" && msg.content ? (
-                      <div
-                        className="chat-msg-content chat-msg-content-md"
-                        dangerouslySetInnerHTML={{ __html: (typeof marked !== "undefined" ? marked.parse(msg.content) : msg.content) }}
-                      />
+                      <div className={`chat-msg-content chat-msg-content-md ${i === messages.length - 1 && isLoading ? "chat-msg-streaming" : ""}`}>
+                        <div dangerouslySetInnerHTML={{ __html: (typeof marked !== "undefined" ? marked.parse(msg.content) : msg.content) }} />
+                        {i === messages.length - 1 && isLoading && <span className="chat-stream-cursor" aria-hidden="true" />}
+                      </div>
                     ) : (
-                      <div className="chat-msg-content">{msg.content || (msg.role === "assistant" && isLoading ? "..." : "")}</div>
+                      <div className="chat-msg-content">
+                        {msg.content}
+                        {msg.role === "assistant" && isLoading && <span className="chat-stream-cursor" aria-hidden="true" />}
+                      </div>
                     )}
                   </div>
                 ))}
