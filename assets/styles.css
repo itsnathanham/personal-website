@@ -557,9 +557,6 @@ button:focus-visible,
 .copy-btn:hover { color: var(--accent); }
 .copy-btn.copied { color: var(--accent); }
 
-/* Chatbox heading - accent instead of gradient */
-.chat-box h2 { color: var(--accent2); }
-
 /* Card content padding */
 .card-content { padding: 24px; }
 .card-content-tight { padding: 18px 22px 22px; }
@@ -608,13 +605,11 @@ button:focus-visible,
   .wrap-hero { padding: 56px 32px; }
   .hgrid { grid-template-columns: 1fr; gap: 36px; text-align: left; }
   .ring { margin: 0 auto; width: 220px; height: 220px; }
-  .nlinks { display: none; }
   .pgrid { grid-template-columns: 1fr; }
   #home .wrap-hero,
   #home .hgrid,
   #home .hgrid > div:first-child { text-align: left; }
   #home .hero-cta { text-align: center; }
-  .nav-toggle { display: flex; }
   .resume-item-header { flex-direction: column; align-items: flex-start; }
   .footer-wrap { padding: 20px 32px; }
 }
