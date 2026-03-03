@@ -65,9 +65,9 @@
         const [mobileOpen, setMobileOpen] = useState(false);
         const sections = [
           { id: "home", label: "Home" },
+          { id: "resume", label: "Experience" },
           { id: "building", label: "Building" },
           { id: "chatbot", label: "Chatbot" },
-          { id: "resume", label: "Experience" },
           { id: "posts", label: "Posts" },
           { id: "contact", label: "Contact" },
         ];
@@ -263,6 +263,74 @@
             </div>
             </section>
 
+            <div id="resume" className="section-anchor">
+              <div className="strip">
+                <div className="wrap">
+                  <h2 className="sh">Experience</h2>
+                  <div style={{ marginBottom: 24 }}>
+                    <a href="assets/resume.docx" className="btn-g" target="_blank" rel="noreferrer" download="Nathan Hamilton Resume PM.docx">
+                      Download PDF Resume
+                    </a>
+                  </div>
+                  <article className="resume-content">
+                    <section className="resume-block">
+                      <div className="resume-item">
+                        <div className="resume-item-header">
+                          <span className="resume-title">Head of Product & Growth</span>
+                          <span className="resume-meta">Dividend Watch (NH82 Media) • 2022 – Present</span>
+                        </div>
+                      </div>
+                      <div className="resume-timeline">
+                        <div className="resume-timeline-item">
+                          <div className="resume-item-header">
+                            <span className="resume-title">Director, Product & Growth</span>
+                            <span className="resume-meta">Motley Fool • 2016 – 2022</span>
+                          </div>
+                          <p className="resume-desc">Led product and growth P&L for $100M+ finance marketplace product</p>
+                        </div>
+                        <div className="resume-timeline-item">
+                          <div className="resume-item-header">
+                            <span className="resume-title">Director, International Growth Marketing</span>
+                            <span className="resume-meta">Motley Fool • 2016</span>
+                          </div>
+                        </div>
+                        <div className="resume-timeline-item">
+                          <div className="resume-item-header">
+                            <span className="resume-title">Performance Marketing Manager</span>
+                            <span className="resume-meta">Motley Fool • 2015 – 2016</span>
+                          </div>
+                        </div>
+                        <div className="resume-timeline-item">
+                          <div className="resume-item-header">
+                            <span className="resume-title">Editorial Lead</span>
+                            <span className="resume-meta">Motley Fool • 2014</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="resume-item">
+                        <div className="resume-item-header">
+                          <span className="resume-title">Equity Research Intern</span>
+                          <span className="resume-meta">Tamro Capital • 2013</span>
+                        </div>
+                      </div>
+                      <div className="resume-item">
+                        <div className="resume-item-header">
+                          <span className="resume-title">Hedge Fund Research Analyst</span>
+                          <span className="resume-meta">Smithsonian Endowment • 2013</span>
+                        </div>
+                      </div>
+                      <div className="resume-item">
+                        <div className="resume-item-header">
+                          <span className="resume-title">Sr. Specialist, Equities & Options</span>
+                          <span className="resume-meta">Charles Schwab • 2008 – 2011</span>
+                        </div>
+                      </div>
+                    </section>
+                  </article>
+                </div>
+              </div>
+            </div>
+
             <div id="building" className="strip section-anchor">
               <div className="wrap">
                 <h2 className="sh">Currently Building</h2>
@@ -399,73 +467,6 @@
                       {/* TODO: Replace with Zapier chatbot embed */}
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-
-            <div id="resume" className="section-anchor">
-              <div className="strip">
-                <div className="wrap">
-                  <h2 className="sh">Experience</h2>
-                  <div style={{ marginBottom: 24 }}>
-                    <a href="assets/resume.docx" className="btn-g" target="_blank" rel="noreferrer" download="Nathan Hamilton Resume PM.docx">
-                      Download PDF Resume
-                    </a>
-                  </div>
-                  <article className="resume-content">
-                    <section className="resume-block">
-                      <div className="resume-item">
-                        <div className="resume-item-header">
-                          <span className="resume-title">Head of Product & Growth</span>
-                          <span className="resume-meta">Dividend Watch (NH82 Media) • 2022 – Present</span>
-                        </div>
-                      </div>
-                      <div className="resume-timeline">
-                        <div className="resume-timeline-item">
-                          <div className="resume-item-header">
-                            <span className="resume-title">Director, Product & Growth</span>
-                            <span className="resume-meta">Motley Fool • 2016 – 2022</span>
-                          </div>
-                        </div>
-                        <div className="resume-timeline-item">
-                          <div className="resume-item-header">
-                            <span className="resume-title">Director, International Growth Marketing</span>
-                            <span className="resume-meta">Motley Fool • 2016</span>
-                          </div>
-                        </div>
-                        <div className="resume-timeline-item">
-                          <div className="resume-item-header">
-                            <span className="resume-title">Performance Marketing Manager</span>
-                            <span className="resume-meta">Motley Fool • 2015 – 2016</span>
-                          </div>
-                        </div>
-                        <div className="resume-timeline-item">
-                          <div className="resume-item-header">
-                            <span className="resume-title">Editorial Lead</span>
-                            <span className="resume-meta">Motley Fool • 2014</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="resume-item">
-                        <div className="resume-item-header">
-                          <span className="resume-title">Equity Research Intern</span>
-                          <span className="resume-meta">Tamro Capital • 2013</span>
-                        </div>
-                      </div>
-                      <div className="resume-item">
-                        <div className="resume-item-header">
-                          <span className="resume-title">Hedge Fund Research Analyst</span>
-                          <span className="resume-meta">Smithsonian Endowment • 2013</span>
-                        </div>
-                      </div>
-                      <div className="resume-item">
-                        <div className="resume-item-header">
-                          <span className="resume-title">Sr. Specialist, Equities & Options</span>
-                          <span className="resume-meta">Charles Schwab • 2008 – 2011</span>
-                        </div>
-                      </div>
-                    </section>
-                  </article>
                 </div>
               </div>
             </div>
