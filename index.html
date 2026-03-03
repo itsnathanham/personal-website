@@ -61,67 +61,19 @@
         }
       }
 
-      function Nav({ activeSection, onNavigate }) {
-        const [mobileOpen, setMobileOpen] = useState(false);
-        const sections = [
-          { id: "home", label: "Home" },
-          { id: "resume", label: "Experience" },
-          { id: "building", label: "Building" },
-          { id: "chatbot", label: "Chatbot" },
-          { id: "posts", label: "Posts" },
-          { id: "contact", label: "Contact" },
-        ];
-        const handleClick = (id) => {
-          onNavigate(id);
-          scrollToSection(id);
-          setMobileOpen(false);
-        };
+      function Header() {
         return (
-          <header style={{ position: "relative" }}>
+          <header>
             <nav>
               <div
                 className="nlogo"
-                onClick={() => handleClick("home")}
+                onClick={() => scrollToSection("home")}
                 tabIndex={0}
                 role="button"
-                onKeyDown={(e) => e.key === "Enter" && handleClick("home")}
+                onKeyDown={(e) => e.key === "Enter" && scrollToSection("home")}
                 style={{ cursor: "pointer" }}
               >
                 Nathan Hamilton
-              </div>
-              <ul className="nlinks">
-                {sections.map(({ id, label }) => (
-                  <li
-                    key={id}
-                    className={`nl ${activeSection === id ? "on" : ""}`}
-                    onClick={() => handleClick(id)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    {label}
-                  </li>
-                ))}
-              </ul>
-              <button
-                className="nav-toggle"
-                aria-expanded={mobileOpen}
-                aria-label="Toggle menu"
-                onClick={() => setMobileOpen(!mobileOpen)}
-              >
-                <span />
-                <span />
-                <span />
-              </button>
-              <div className={`nav-dropdown ${mobileOpen ? "open" : ""}`}>
-              {sections.map(({ id, label }) => (
-                <div
-                  key={id}
-                  className={`nl ${activeSection === id ? "on" : ""}`}
-                  onClick={() => handleClick(id)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {label}
-                </div>
-              ))}
               </div>
             </nav>
           </header>
@@ -163,24 +115,6 @@
         return (
           <div className="footer-wrap">
             <span className="ft">© 2026 Nathan Hamilton</span>
-            <div style={{ display: "flex", gap: 20 }}>
-              <a
-                className="fl"
-                href="https://www.linkedin.com/in/nathan-hamilton-8492456/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                LinkedIn ↗
-              </a>
-              <a
-                className="fl"
-                href="https://github.com/itsnathanham"
-                target="_blank"
-                rel="noreferrer"
-              >
-                GitHub ↗
-              </a>
-            </div>
           </div>
         );
       }
@@ -254,7 +188,7 @@
                   <h2 className="sh">Experience</h2>
                   <div style={{ marginBottom: 24 }}>
                     <a href="assets/resume.docx" className="resume-download" target="_blank" rel="noreferrer" download="Nathan Hamilton Resume PM.docx">
-                      Download PDF Resume
+                      Download full resume
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                         <polyline points="7 10 12 15 17 10" />
@@ -479,7 +413,7 @@
             </div>
 
             <div id="contact" className="section-anchor">
-              <div className="strip">
+              <div className="strip strip-last">
                 <div className="wrap">
                   <h2 className="sh">Contact</h2>
                   <p style={{ fontSize: 16, lineHeight: 1.7, marginBottom: 16 }}>
@@ -525,19 +459,13 @@
       }
 
       function App() {
-        const [activeSection, setActiveSection] = useState(
-          () => (typeof window !== "undefined" && window.location.hash.slice(1)) || "home"
-        );
         useEffect(() => {
-          const onHash = () => setActiveSection(window.location.hash.slice(1) || "home");
-          window.addEventListener("hashchange", onHash);
           const hash = window.location.hash.slice(1);
           if (hash) setTimeout(() => scrollToSection(hash), 0);
-          return () => window.removeEventListener("hashchange", onHash);
         }, []);
         return (
           <>
-            <Nav activeSection={activeSection} onNavigate={setActiveSection} />
+            <Header />
             <SinglePage />
           </>
         );
