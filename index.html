@@ -121,8 +121,8 @@
       }
 
       const DEFAULT_QUESTIONS = [
-        { text: "Analyze Nathan's fit for a specific role", promptForJobDescription: true },
-        { text: "Ask a question about Nathan's product leadership experience." },
+        "Analyze Nathan's fit for a specific role",
+        "Ask a question about Nathan's product leadership experience.",
       ];
 
       function ChatBot() {
@@ -130,7 +130,6 @@
         const [input, setInput] = useState("");
         const [isLoading, setIsLoading] = useState(false);
         const messagesContainerRef = useRef(null);
-        const inputRef = useRef(null);
         const streamBufferRef = useRef("");
         const rafRef = useRef(null);
 
@@ -234,20 +233,13 @@
                 <div className="chat-question-chips">
                   {DEFAULT_QUESTIONS.map((q) => (
                     <button
-                      key={q.text}
+                      key={q}
                       type="button"
                       className="chat-question-chip"
-                      onClick={() => {
-                        if (q.promptForJobDescription) {
-                          setInput("Analyze Nathan's fit for the following role:\n\n");
-                          setTimeout(() => inputRef.current?.focus(), 0);
-                        } else {
-                          sendMessage(q.text);
-                        }
-                      }}
+                      onClick={() => sendMessage(q)}
                       disabled={isLoading}
                     >
-                      {q.text}
+                      {q}
                     </button>
                   ))}
                 </div>
@@ -274,7 +266,6 @@
             )}
             <div className="chat-input-wrap">
               <input
-                ref={inputRef}
                 type="text"
                 className="chat-input"
                 value={input}
@@ -351,7 +342,7 @@
                   </div>
                   <div className="hero-cta">
                     <a href="#chatbot" className="btn-g">
-                      Analyze Nathan's Role Fit with AI
+                      Get to Know My Product Work with AI
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style={{ marginLeft: 4, verticalAlign: "middle" }}>
                         <path d="M12 2L14 10L22 12L14 14L12 22L10 14L2 12L10 10Z" />
                       </svg>
