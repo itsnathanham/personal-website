@@ -120,6 +120,20 @@
         );
       }
 
+      const markdownParser = window.marked;
+      if (markdownParser) {
+        markdownParser.setOptions({ breaks: true, gfm: true });
+      }
+
+      function parseMarkdown(text) {
+        if (!text || !markdownParser?.parse) return text || "";
+        try {
+          return markdownParser.parse(text, { async: false });
+        } catch (_) {
+          return text;
+        }
+      }
+
       const DEFAULT_QUESTIONS = [
         "Analyze Nathan's fit for a specific role",
         "Ask a question about Nathan's product leadership experience.",
@@ -131,8 +145,9 @@
         const [isLoading, setIsLoading] = useState(false);
         const [isThinking, setIsThinking] = useState(false);
         const messagesContainerRef = useRef(null);
-        const streamElRef = useRef(null);
-        const streamBufferRef = useRef("");
+        const streamContainerRef = useRef(null);
+        const streamAccumRef = useRef("");
+        const lastRenderedRef = useRef("");
         const rafRef = useRef(null);
         const abortControllerRef = useRef(null);
 
@@ -152,47 +167,68 @@
           if (el) el.scrollTop = el.scrollHeight;
         };
 
-        const flushStream = () => {
-          if (streamBufferRef.current === "") return;
-          const text = streamBufferRef.current;
-          streamBufferRef.current = "";
-          if (streamElRef.current) {
-            streamElRef.current.textContent += text;
+        const renderStreamIfChanged = (shouldScroll = false) => {
+          const text = streamAccumRef.current;
+          if (text === lastRenderedRef.current) return;
+          lastRenderedRef.current = text;
+          if (streamContainerRef.current) {
+            streamContainerRef.current.textContent = text;
           }
           setIsThinking(false);
-          scrollIfNearBottom();
-          rafRef.current = null;
+          if (shouldScroll) scrollIfNearBottom();
         };
 
-        const finalizeStream = ({ errorText = null, cancelled = false } = {}) => {
+        const streamFrame = () => {
+          rafRef.current = null;
+          renderStreamIfChanged(true);
+        };
+
+        const scheduleStreamRender = () => {
+          if (!rafRef.current) {
+            rafRef.current = requestAnimationFrame(streamFrame);
+          }
+        };
+
+        const flushPendingStream = () => {
           if (rafRef.current) {
             cancelAnimationFrame(rafRef.current);
             rafRef.current = null;
           }
-          if (streamBufferRef.current && streamElRef.current) {
-            streamElRef.current.textContent += streamBufferRef.current;
-            streamBufferRef.current = "";
+          renderStreamIfChanged(false);
+        };
+
+        const resetStream = () => {
+          streamAccumRef.current = "";
+          lastRenderedRef.current = "";
+          if (streamContainerRef.current) {
+            streamContainerRef.current.textContent = "";
           }
-          const finalText = streamElRef.current?.textContent?.trim() || "";
+        };
+
+        const finalizeStream = ({ errorText = null } = {}) => {
+          flushPendingStream();
+
+          const finalText = streamAccumRef.current.trim();
 
           setMessages((m) => {
             const next = [...m];
             const last = next[next.length - 1];
             if (last?.role !== "assistant") return m;
             if (errorText) {
-              next[next.length - 1] = { role: "assistant", content: errorText, formatted: false };
+              next[next.length - 1] = { role: "assistant", content: errorText };
               return next;
             }
             if (!finalText) {
               return next.slice(0, -1);
             }
-            next[next.length - 1] = { role: "assistant", content: finalText, formatted: true };
+            next[next.length - 1] = { role: "assistant", content: finalText };
             return next;
           });
 
           setIsLoading(false);
           setIsThinking(false);
           abortControllerRef.current = null;
+          resetStream();
         };
 
         const stopGeneration = () => {
@@ -207,6 +243,7 @@
           setMessages((m) => [...m, userMsg, { role: "assistant", content: "" }]);
           setIsLoading(true);
           setIsThinking(true);
+          resetStream();
           requestAnimationFrame(scrollToBottom);
 
           const apiMessages = [...messages, userMsg].map((m) => ({
@@ -238,10 +275,11 @@
                   try {
                     const data = JSON.parse(line.slice(6));
                     if (data.type === "text" && data.text) {
-                      streamBufferRef.current += data.text;
-                      if (!rafRef.current) {
-                        rafRef.current = requestAnimationFrame(flushStream);
-                      }
+                      streamAccumRef.current += data.text;
+                      scheduleStreamRender();
+                    } else if (data.type === "done") {
+                      finalizeStream();
+                      return;
                     } else if (data.type === "error") {
                       finalizeStream({ errorText: "Sorry, something went wrong. Please try again." });
                       return;
@@ -253,7 +291,7 @@
             finalizeStream();
           } catch (err) {
             if (err.name === "AbortError") {
-              finalizeStream({ cancelled: true });
+              finalizeStream();
               return;
             }
             finalizeStream({
@@ -290,7 +328,7 @@
                   if (isActiveStream) {
                     return (
                       <div key={i} className="chat-msg chat-msg-assistant">
-                        <div className="chat-msg-content">
+                        <div className="chat-msg-content chat-msg-streaming">
                           {isThinking && (
                             <div className="chat-thinking" aria-label="Thinking">
                               <span className="chat-thinking-dot" />
@@ -298,11 +336,7 @@
                               <span className="chat-thinking-dot" />
                             </div>
                           )}
-                          <span
-                            ref={streamElRef}
-                            className="chat-stream-text"
-                            style={isThinking ? { display: "none" } : undefined}
-                          />
+                          <div ref={streamContainerRef} className="chat-stream-text" />
                           {!isThinking && (
                             <span className="chat-stream-cursor" aria-hidden="true" />
                           )}
@@ -313,16 +347,9 @@
 
                   return (
                     <div key={i} className={`chat-msg chat-msg-${msg.role}`}>
-                      {msg.role === "assistant" && msg.content && msg.formatted ? (
+                      {msg.role === "assistant" && msg.content ? (
                         <div className="chat-msg-content chat-msg-content-md">
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                typeof marked !== "undefined"
-                                  ? marked.parse(msg.content)
-                                  : msg.content,
-                            }}
-                          />
+                          <div dangerouslySetInnerHTML={{ __html: parseMarkdown(msg.content) }} />
                         </div>
                       ) : (
                         <div className="chat-msg-content">{msg.content}</div>
@@ -530,7 +557,7 @@
                       link: "https://dividend.watch/",
                     },
                     {
-                      title: "Golf Analytics App (in progress)",
+                      title: "Golf Analytics App",
                       desc: "Tracking rounds, handicap trends, and performance insights, genAI coaching assistant.",
                       tags: ["Cursor", "Claude", "Figma", "Personal Project", "genAI assistant"],
                       link: "https://github.com/itsnathanham",
