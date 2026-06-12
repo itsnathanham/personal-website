@@ -120,20 +120,6 @@
         );
       }
 
-      const markdownParser = window.marked;
-      if (markdownParser) {
-        markdownParser.setOptions({ breaks: true, gfm: true });
-      }
-
-      function parseMarkdown(text) {
-        if (!text || !markdownParser?.parse) return text || "";
-        try {
-          return markdownParser.parse(text, { async: false });
-        } catch (_) {
-          return text;
-        }
-      }
-
       const DEFAULT_QUESTIONS = [
         "Analyze Nathan's fit for a specific role",
         "Ask a question about Nathan's product leadership experience.",
@@ -145,9 +131,8 @@
         const [isLoading, setIsLoading] = useState(false);
         const [isThinking, setIsThinking] = useState(false);
         const messagesContainerRef = useRef(null);
-        const streamContainerRef = useRef(null);
-        const streamAccumRef = useRef("");
-        const lastRenderedRef = useRef("");
+        const streamElRef = useRef(null);
+        const streamBufferRef = useRef("");
         const rafRef = useRef(null);
         const abortControllerRef = useRef(null);
 
@@ -167,68 +152,47 @@
           if (el) el.scrollTop = el.scrollHeight;
         };
 
-        const renderStreamIfChanged = (shouldScroll = false) => {
-          const text = streamAccumRef.current;
-          if (text === lastRenderedRef.current) return;
-          lastRenderedRef.current = text;
-          if (streamContainerRef.current) {
-            streamContainerRef.current.textContent = text;
+        const flushStream = () => {
+          if (streamBufferRef.current === "") return;
+          const text = streamBufferRef.current;
+          streamBufferRef.current = "";
+          if (streamElRef.current) {
+            streamElRef.current.textContent += text;
           }
           setIsThinking(false);
-          if (shouldScroll) scrollIfNearBottom();
-        };
-
-        const streamFrame = () => {
+          scrollIfNearBottom();
           rafRef.current = null;
-          renderStreamIfChanged(true);
         };
 
-        const scheduleStreamRender = () => {
-          if (!rafRef.current) {
-            rafRef.current = requestAnimationFrame(streamFrame);
-          }
-        };
-
-        const flushPendingStream = () => {
+        const finalizeStream = ({ errorText = null, cancelled = false } = {}) => {
           if (rafRef.current) {
             cancelAnimationFrame(rafRef.current);
             rafRef.current = null;
           }
-          renderStreamIfChanged(false);
-        };
-
-        const resetStream = () => {
-          streamAccumRef.current = "";
-          lastRenderedRef.current = "";
-          if (streamContainerRef.current) {
-            streamContainerRef.current.textContent = "";
+          if (streamBufferRef.current && streamElRef.current) {
+            streamElRef.current.textContent += streamBufferRef.current;
+            streamBufferRef.current = "";
           }
-        };
-
-        const finalizeStream = ({ errorText = null } = {}) => {
-          flushPendingStream();
-
-          const finalText = streamAccumRef.current.trim();
+          const finalText = streamElRef.current?.textContent?.trim() || "";
 
           setMessages((m) => {
             const next = [...m];
             const last = next[next.length - 1];
             if (last?.role !== "assistant") return m;
             if (errorText) {
-              next[next.length - 1] = { role: "assistant", content: errorText };
+              next[next.length - 1] = { role: "assistant", content: errorText, formatted: false };
               return next;
             }
             if (!finalText) {
               return next.slice(0, -1);
             }
-            next[next.length - 1] = { role: "assistant", content: finalText };
+            next[next.length - 1] = { role: "assistant", content: finalText, formatted: true };
             return next;
           });
 
           setIsLoading(false);
           setIsThinking(false);
           abortControllerRef.current = null;
-          resetStream();
         };
 
         const stopGeneration = () => {
@@ -243,7 +207,6 @@
           setMessages((m) => [...m, userMsg, { role: "assistant", content: "" }]);
           setIsLoading(true);
           setIsThinking(true);
-          resetStream();
           requestAnimationFrame(scrollToBottom);
 
           const apiMessages = [...messages, userMsg].map((m) => ({
@@ -275,11 +238,10 @@
                   try {
                     const data = JSON.parse(line.slice(6));
                     if (data.type === "text" && data.text) {
-                      streamAccumRef.current += data.text;
-                      scheduleStreamRender();
-                    } else if (data.type === "done") {
-                      finalizeStream();
-                      return;
+                      streamBufferRef.current += data.text;
+                      if (!rafRef.current) {
+                        rafRef.current = requestAnimationFrame(flushStream);
+                      }
                     } else if (data.type === "error") {
                       finalizeStream({ errorText: "Sorry, something went wrong. Please try again." });
                       return;
@@ -291,7 +253,7 @@
             finalizeStream();
           } catch (err) {
             if (err.name === "AbortError") {
-              finalizeStream();
+              finalizeStream({ cancelled: true });
               return;
             }
             finalizeStream({
@@ -328,7 +290,7 @@
                   if (isActiveStream) {
                     return (
                       <div key={i} className="chat-msg chat-msg-assistant">
-                        <div className="chat-msg-content chat-msg-streaming">
+                        <div className="chat-msg-content">
                           {isThinking && (
                             <div className="chat-thinking" aria-label="Thinking">
                               <span className="chat-thinking-dot" />
@@ -336,7 +298,11 @@
                               <span className="chat-thinking-dot" />
                             </div>
                           )}
-                          <div ref={streamContainerRef} className="chat-stream-text" />
+                          <span
+                            ref={streamElRef}
+                            className="chat-stream-text"
+                            style={isThinking ? { display: "none" } : undefined}
+                          />
                           {!isThinking && (
                             <span className="chat-stream-cursor" aria-hidden="true" />
                           )}
@@ -347,9 +313,16 @@
 
                   return (
                     <div key={i} className={`chat-msg chat-msg-${msg.role}`}>
-                      {msg.role === "assistant" && msg.content ? (
+                      {msg.role === "assistant" && msg.content && msg.formatted ? (
                         <div className="chat-msg-content chat-msg-content-md">
-                          <div dangerouslySetInnerHTML={{ __html: parseMarkdown(msg.content) }} />
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                typeof marked !== "undefined"
+                                  ? marked.parse(msg.content)
+                                  : msg.content,
+                            }}
+                          />
                         </div>
                       ) : (
                         <div className="chat-msg-content">{msg.content}</div>
@@ -557,7 +530,7 @@
                       link: "https://dividend.watch/",
                     },
                     {
-                      title: "Golf Analytics App",
+                      title: "Golf Analytics App (in progress)",
                       desc: "Tracking rounds, handicap trends, and performance insights, genAI coaching assistant.",
                       tags: ["Cursor", "Claude", "Figma", "Personal Project", "genAI assistant"],
                       link: "https://github.com/itsnathanham",

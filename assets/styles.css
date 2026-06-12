@@ -310,13 +310,8 @@ nav {
   30% { transform: translateY(-4px); opacity: 1; }
 }
 
-.chat-msg-streaming {
-  min-height: 1.65em;
-}
-
 .chat-stream-text {
   white-space: pre-wrap;
-  word-break: break-word;
 }
 
 .chat-input-wrap {
