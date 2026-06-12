@@ -125,78 +125,33 @@
         "Ask a question about Nathan's product leadership experience.",
       ];
 
-      function Assistant() {
+      function ChatBot() {
         const [messages, setMessages] = useState([]);
         const [input, setInput] = useState("");
         const [isLoading, setIsLoading] = useState(false);
-        const [isThinking, setIsThinking] = useState(false);
         const messagesContainerRef = useRef(null);
-        const streamElRef = useRef(null);
         const streamBufferRef = useRef("");
         const rafRef = useRef(null);
-        const abortControllerRef = useRef(null);
-
-        const SCROLL_THRESHOLD = 80;
-
-        const scrollIfNearBottom = () => {
-          const el = messagesContainerRef.current;
-          if (!el) return;
-          const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
-          if (distanceFromBottom <= SCROLL_THRESHOLD) {
-            el.scrollTop = el.scrollHeight;
-          }
-        };
 
         const scrollToBottom = () => {
           const el = messagesContainerRef.current;
           if (el) el.scrollTop = el.scrollHeight;
         };
+        useEffect(scrollToBottom, [messages]);
 
         const flushStream = () => {
           if (streamBufferRef.current === "") return;
           const text = streamBufferRef.current;
           streamBufferRef.current = "";
-          if (streamElRef.current) {
-            streamElRef.current.textContent += text;
-          }
-          setIsThinking(false);
-          scrollIfNearBottom();
-          rafRef.current = null;
-        };
-
-        const finalizeStream = ({ errorText = null, cancelled = false } = {}) => {
-          if (rafRef.current) {
-            cancelAnimationFrame(rafRef.current);
-            rafRef.current = null;
-          }
-          if (streamBufferRef.current && streamElRef.current) {
-            streamElRef.current.textContent += streamBufferRef.current;
-            streamBufferRef.current = "";
-          }
-          const finalText = streamElRef.current?.textContent?.trim() || "";
-
           setMessages((m) => {
             const next = [...m];
             const last = next[next.length - 1];
-            if (last?.role !== "assistant") return m;
-            if (errorText) {
-              next[next.length - 1] = { role: "assistant", content: errorText, formatted: false };
-              return next;
+            if (last?.role === "assistant") {
+              next[next.length - 1] = { ...last, content: last.content + text };
             }
-            if (!finalText) {
-              return next.slice(0, -1);
-            }
-            next[next.length - 1] = { role: "assistant", content: finalText, formatted: true };
             return next;
           });
-
-          setIsLoading(false);
-          setIsThinking(false);
-          abortControllerRef.current = null;
-        };
-
-        const stopGeneration = () => {
-          abortControllerRef.current?.abort();
+          rafRef.current = null;
         };
 
         const sendMessage = async (text) => {
@@ -204,24 +159,21 @@
           if (!trimmed || isLoading) return;
           setInput("");
           const userMsg = { role: "user", content: trimmed };
-          setMessages((m) => [...m, userMsg, { role: "assistant", content: "" }]);
+          setMessages((m) => [...m, userMsg]);
           setIsLoading(true);
-          setIsThinking(true);
-          requestAnimationFrame(scrollToBottom);
+          const assistantMsg = { role: "assistant", content: "" };
+          setMessages((m) => [...m, assistantMsg]);
 
           const apiMessages = [...messages, userMsg].map((m) => ({
             role: m.role,
             content: m.content,
           }));
 
-          abortControllerRef.current = new AbortController();
-
           try {
             const res = await fetch("/api/chat", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ messages: apiMessages }),
-              signal: abortControllerRef.current.signal,
             });
             if (!res.ok) throw new Error(res.statusText);
             const reader = res.body.getReader();
@@ -240,25 +192,37 @@
                     if (data.type === "text" && data.text) {
                       streamBufferRef.current += data.text;
                       if (!rafRef.current) {
-                        rafRef.current = requestAnimationFrame(flushStream);
+                        rafRef.current = requestAnimationFrame(() => {
+                          flushStream();
+                        });
                       }
                     } else if (data.type === "error") {
-                      finalizeStream({ errorText: "Sorry, something went wrong. Please try again." });
-                      return;
+                      setMessages((m) => {
+                        const next = [...m];
+                        next[next.length - 1] = {
+                          role: "assistant",
+                          content: "Sorry, something went wrong. Please try again.",
+                        };
+                        return next;
+                      });
                     }
                   } catch (_) {}
                 }
               }
             }
-            finalizeStream();
           } catch (err) {
-            if (err.name === "AbortError") {
-              finalizeStream({ cancelled: true });
-              return;
-            }
-            finalizeStream({
-              errorText: "Sorry, I couldn't connect. Please check your connection and try again.",
+            setMessages((m) => {
+              const next = [...m];
+              next[next.length - 1] = {
+                role: "assistant",
+                content: "Sorry, I couldn't connect. Please check your connection and try again.",
+              };
+              return next;
             });
+          } finally {
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+            flushStream();
+            setIsLoading(false);
           }
         };
 
@@ -283,53 +247,21 @@
               </div>
             ) : (
               <div className="chat-messages" ref={messagesContainerRef}>
-                {messages.map((msg, i) => {
-                  const isActiveStream =
-                    isLoading && i === messages.length - 1 && msg.role === "assistant";
-
-                  if (isActiveStream) {
-                    return (
-                      <div key={i} className="chat-msg chat-msg-assistant">
-                        <div className="chat-msg-content">
-                          {isThinking && (
-                            <div className="chat-thinking" aria-label="Thinking">
-                              <span className="chat-thinking-dot" />
-                              <span className="chat-thinking-dot" />
-                              <span className="chat-thinking-dot" />
-                            </div>
-                          )}
-                          <span
-                            ref={streamElRef}
-                            className="chat-stream-text"
-                            style={isThinking ? { display: "none" } : undefined}
-                          />
-                          {!isThinking && (
-                            <span className="chat-stream-cursor" aria-hidden="true" />
-                          )}
-                        </div>
+                {messages.map((msg, i) => (
+                  <div key={i} className={`chat-msg chat-msg-${msg.role}`}>
+                    {msg.role === "assistant" && msg.content ? (
+                      <div className={`chat-msg-content chat-msg-content-md ${i === messages.length - 1 && isLoading ? "chat-msg-streaming" : ""}`}>
+                        <div dangerouslySetInnerHTML={{ __html: (typeof marked !== "undefined" ? marked.parse(msg.content) : msg.content) }} />
+                        {i === messages.length - 1 && isLoading && <span className="chat-stream-cursor" aria-hidden="true" />}
                       </div>
-                    );
-                  }
-
-                  return (
-                    <div key={i} className={`chat-msg chat-msg-${msg.role}`}>
-                      {msg.role === "assistant" && msg.content && msg.formatted ? (
-                        <div className="chat-msg-content chat-msg-content-md">
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                typeof marked !== "undefined"
-                                  ? marked.parse(msg.content)
-                                  : msg.content,
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        <div className="chat-msg-content">{msg.content}</div>
-                      )}
-                    </div>
-                  );
-                })}
+                    ) : (
+                      <div className="chat-msg-content">
+                        {msg.content}
+                        {msg.role === "assistant" && isLoading && <span className="chat-stream-cursor" aria-hidden="true" />}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             )}
             <div className="chat-input-wrap">
@@ -342,26 +274,15 @@
                 disabled={isLoading}
                 aria-label="Chat message"
               />
-              {isLoading ? (
-                <button
-                  type="button"
-                  className="btn-g chat-send chat-send-stop"
-                  onClick={stopGeneration}
-                  aria-label="Stop generating"
-                >
-                  Stop
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="btn-g chat-send"
-                  onClick={() => sendMessage()}
-                  disabled={!input.trim()}
-                  aria-label="Send message"
-                >
-                  Send
-                </button>
-              )}
+              <button
+                type="button"
+                className="btn-g chat-send"
+                onClick={() => sendMessage()}
+                disabled={isLoading || !input.trim()}
+                aria-label="Send message"
+              >
+                {isLoading ? "..." : "Send"}
+              </button>
             </div>
           </div>
         );
@@ -420,7 +341,7 @@
                     </div>
                   </div>
                   <div className="hero-cta">
-                    <a href="#assistant" className="btn-g">
+                    <a href="#chatbot" className="btn-g">
                       Get to Know My Product Work with AI
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style={{ marginLeft: 4, verticalAlign: "middle" }}>
                         <path d="M12 2L14 10L22 12L14 14L12 22L10 14L2 12L10 10Z" />
@@ -530,6 +451,12 @@
                       link: "https://dividend.watch/",
                     },
                     {
+                      title: "Chore Tracker App (in progress)",
+                      desc: "Full product lifecycle kids chore tracking app with streak mechanics and genAI.",
+                      tags: ["Cursor", "Claude", "Figma", "Personal Project", "genAI assistant"],
+                      link: "https://github.com/itsnathanham",
+                    },
+                    {
                       title: "Golf Analytics App (in progress)",
                       desc: "Tracking rounds, handicap trends, and performance insights, genAI coaching assistant.",
                       tags: ["Cursor", "Claude", "Figma", "Personal Project", "genAI assistant"],
@@ -543,8 +470,8 @@
                     },
                     {
                       title: "This Website",
-                      desc: "A fast, clean personal website built and iterated with AI-assisted workflows, including a custom built-from-scratch assistant.",
-                      tags: ["Claude", "Cursor", "Custom Assistant", "Sonnet 4.6"],
+                      desc: "A fast, clean personal website built and iterated with AI-assisted workflows, including a custom built-from-scratch chatbot.",
+                      tags: ["Claude", "Cursor", "Custom Chatbot", "Sonnet 4.6"],
                       link: null,
                     },
                   ].map((p) => {
@@ -592,12 +519,12 @@
               </div>
             </div>
 
-            <div id="assistant" className="section-anchor">
+            <div id="chatbot" className="section-anchor">
               <div className="strip">
                 <div className="wrap">
                   <h2 className="sh">Get to Know My Product Work</h2>
                   <div style={{ paddingTop: 0, paddingBottom: 48 }}>
-                    <Assistant />
+                    <ChatBot />
                   </div>
                 </div>
               </div>
