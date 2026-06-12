@@ -287,8 +287,31 @@ nav {
   50% { opacity: 0; }
 }
 
-.chat-msg-streaming {
-  transition: opacity 0.15s ease;
+.chat-thinking {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 0;
+}
+
+.chat-thinking-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  animation: chat-thinking-bounce 1.4s ease-in-out infinite;
+}
+
+.chat-thinking-dot:nth-child(2) { animation-delay: 0.16s; }
+.chat-thinking-dot:nth-child(3) { animation-delay: 0.32s; }
+
+@keyframes chat-thinking-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+.chat-stream-text {
+  white-space: pre-wrap;
 }
 
 .chat-input-wrap {
@@ -320,6 +343,17 @@ nav {
 
 .chat-send {
   flex-shrink: 0;
+}
+
+.chat-send-stop {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.chat-send-stop:hover {
+  background: var(--tag-bg);
+  color: var(--text);
 }
 
 .hgrid {

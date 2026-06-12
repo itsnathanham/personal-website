@@ -38,11 +38,19 @@ module.exports = async (req, res) => {
   res.setHeader("X-Accel-Buffering", "no");
   res.flushHeaders?.();
 
+  res.write(`data: ${JSON.stringify({ type: "started" })}\n\n`);
+
   try {
-    const stream = client.messages.stream({
+    const stream = client.beta.promptCaching.messages.stream({
       model: "claude-sonnet-4-6",
       max_tokens: 4096,
-      system: getSystemPrompt(),
+      system: [
+        {
+          type: "text",
+          text: getSystemPrompt(),
+          cache_control: { type: "ephemeral" },
+        },
+      ],
       messages: messages.map((m) => ({ role: m.role, content: m.content })),
     });
 
