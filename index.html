@@ -23,7 +23,7 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.26.5/babel.min.js"></script>
 
     <script type="text/babel" data-presets="react">
       const { useState, useEffect, useRef } = React;
@@ -359,7 +359,7 @@
                 <div className="wrap">
                   <h2 className="sh">Experience</h2>
                   <div style={{ marginBottom: 24 }}>
-                    <a href="assets/resume.docx" className="resume-download" target="_blank" rel="noreferrer" download="Nathan Hamilton Resume PM.docx">
+                    <a href="assets/Nathan Hamilton Resume Product Manager.docx" className="resume-download" target="_blank" rel="noreferrer" download="Nathan Hamilton Resume Product Manager.docx">
                       Download full resume
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -373,14 +373,14 @@
                       <div className="resume-item">
                         <div className="resume-item-header">
                           <span className="resume-title">Head of Product & Growth</span>
-                          <span className="resume-meta">Dividend Watch (NH82 Media) • 2022 – Present</span>
+                          <span className="resume-meta">Dividend Watch (NH82 Media) • 2022 – 2026</span>
                         </div>
                         <p className="resume-desc">Acquired a struggling investing SaaS (1-star Trustpilot, drifting from ICP) and executed a full product-led turnaround, now consistently 5 stars, growing to 39,000 users, 119% LTV increase</p>
                       </div>
                       <div className="resume-timeline">
                         <div className="resume-timeline-item">
                           <div className="resume-item-header">
-                            <span className="resume-title">Director, Product & Growth</span>
+                            <span className="resume-title">Vice President, Product & Growth</span>
                             <span className="resume-meta">Motley Fool • 2016 – 2022</span>
                           </div>
                           <p className="resume-desc">Led product roadmap and SEO P&L for $100M+ finance marketplace product, managed and developed team of 20</p>
@@ -440,38 +440,26 @@
                 <div className="pgrid">
                   {[
                     {
-                      title: "Dividend Watch",
+                      title: "Dividend Watch (Sold)",
                       desc: "Executing a product-led turnaround for a B2C investing analytics SaaS with 39,000 users.",
                       tags: [
                         "Product-led growth",
                         "Cursor",
                         "Claude",
-                        "Figma",
+                        "Figma/Claude Design",
                       ],
                       link: "https://dividend.watch/",
                     },
                     {
-                      title: "Chore Tracker App (in progress)",
-                      desc: "Full product lifecycle kids chore tracking app with streak mechanics and genAI.",
-                      tags: ["Cursor", "Claude", "Figma", "Personal Project", "genAI assistant"],
-                      link: "https://github.com/itsnathanham",
-                    },
-                    {
-                      title: "Golf Analytics App (in progress)",
+                      title: "iOS Golf Analytics App (Personal Use)",
                       desc: "Tracking rounds, handicap trends, and performance insights, genAI coaching assistant.",
-                      tags: ["Cursor", "Claude", "Figma", "Personal Project", "genAI assistant"],
+                      tags: ["Cursor", "Claude", "Figma/Claude Design", "Personal Project", "genAI assistant"],
                       link: "https://github.com/itsnathanham",
                     },
                     {
-                      title: "Job Search Agent",
-                      desc: "A custom AI agent that pulls from company job boards and synthesizes career insights in my Airtable workflow.",
-                      tags: ["Zapier Agent", "Airtable"],
-                      link: null,
-                    },
-                    {
-                      title: "This Website",
-                      desc: "A fast, clean personal website built and iterated with AI-assisted workflows, including a custom built-from-scratch chatbot.",
-                      tags: ["Claude", "Cursor", "Custom Chatbot", "Sonnet 4.6"],
+                      title: "This Portfolio Website",
+                      desc: "A fast, clean personal website built and iterated with AI-assisted workflows, including a custom built-from-scratch genAI assistant.",
+                      tags: ["Claude", "Cursor", "genAI assistant"],
                       link: null,
                     },
                   ].map((p) => {
