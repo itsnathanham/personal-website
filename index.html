@@ -351,7 +351,20 @@
             "A personal golf analytics app for iPhone and Apple Watch — log rounds, track handicap trends, and surface performance insights, with a GenAI coaching assistant layered on top of your own data.",
           tags: ["Cursor", "Claude", "Figma/Claude Design", "Personal project", "GenAI assistant"],
           links: [{ label: "Github", href: "https://github.com/itsnathanham" }],
-          images: [],
+          images: [
+            {
+              src: "assets/building/golf-home.png",
+              alt: "Golf Lab home screen with weekly goals and practice calendar",
+            },
+            {
+              src: "assets/building/golf-last-round.png",
+              alt: "Golf Lab last round summary with score, GIR, FIR, and vs-par progression",
+            },
+            {
+              src: "assets/building/golf-round-detail.png",
+              alt: "Golf Lab round detail scorecard for Fox Hollow Links",
+            },
+          ],
         },
         {
           id: "habit-tracker",
@@ -467,27 +480,15 @@
                         </div>
                         <div className="brow-media">
                           {p.images.length > 0 ? (
-                            <>
+                            p.images.map((img, i) => (
                               <img
-                                className="brow-shot brow-shot-primary"
-                                src={p.images[0].src}
-                                alt={p.images[0].alt}
+                                key={`${img.src}-${i}`}
+                                className="brow-shot"
+                                src={img.src}
+                                alt={img.alt}
                                 loading="lazy"
                               />
-                              {p.images.length > 1 && (
-                                <div className="brow-thumbs">
-                                  {p.images.slice(1).map((img, i) => (
-                                    <img
-                                      key={`${img.src}-${i}`}
-                                      className="brow-shot"
-                                      src={img.src}
-                                      alt={img.alt}
-                                      loading="lazy"
-                                    />
-                                  ))}
-                                </div>
-                              )}
-                            </>
+                            ))
                           ) : (
                             <div className="brow-media-placeholder" aria-hidden="true">
                               Screenshots coming soon
