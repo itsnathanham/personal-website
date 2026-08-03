@@ -393,12 +393,182 @@ nav {
   overflow: hidden;
 }
 
-.pgrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
-  margin-bottom: 28px;
+/* Currently Building accordion */
+.bstack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
+
+.brow {
+  padding: 0;
+}
+
+.brow.is-open,
+.brow:hover {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.07);
+}
+
+.brow.is-open .accent-bar,
+.brow:hover .accent-bar {
+  opacity: 1;
+}
+
+.brow-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 18px 22px 22px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.brow-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.brow-header h3 {
+  margin-bottom: 10px;
+}
+
+.brow-header p {
+  margin-bottom: 16px;
+}
+
+.brow-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.brow-tags .tag {
+  margin-right: 0;
+  margin-bottom: 0;
+}
+
+.brow-chevron {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--text-muted);
+  transition: transform 0.25s ease;
+}
+
+.brow.is-open .brow-chevron {
+  transform: rotate(180deg);
+}
+
+.brow-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease;
+}
+
+.brow.is-open .brow-panel {
+  grid-template-rows: 1fr;
+}
+
+.brow-panel-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.brow-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 0 22px 22px;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+
+.brow-overview {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.brow-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+.brow-visit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.brow-visit:hover {
+  color: var(--accent2);
+}
+
+.brow-media {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.brow-shot {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  display: block;
+  object-fit: cover;
+  background: var(--bg);
+}
+
+.brow-shot-primary {
+  aspect-ratio: 16 / 10;
+}
+
+.brow-thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.brow-thumbs .brow-shot {
+  aspect-ratio: 16 / 10;
+}
+
+.brow-media-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 12.5px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.bstack .brow {
+  animation: fadeUp 0.5s ease both;
+}
+
+.bstack .brow:nth-child(1) { animation-delay: 0.05s; }
+.bstack .brow:nth-child(2) { animation-delay: 0.1s; }
+.bstack .brow:nth-child(3) { animation-delay: 0.15s; }
+.bstack .brow:nth-child(4) { animation-delay: 0.2s; }
 
 .rmore {
   color: var(--text-muted);
@@ -608,12 +778,7 @@ button:focus-visible,
 
 .hero-content { animation: fadeUp 0.6s ease forwards; }
 .hero-photo { animation: fadeUp 0.6s 0.15s ease both; }
-.pgrid .card { animation: fadeUp 0.5s ease both; }
-.pgrid .card:nth-child(1) { animation-delay: 0.05s; }
-.pgrid .card:nth-child(2) { animation-delay: 0.1s; }
-.pgrid .card:nth-child(3) { animation-delay: 0.15s; }
-.pgrid .card:nth-child(4) { animation-delay: 0.2s; }
-.pgrid .card:nth-child(5) { animation-delay: 0.25s; }
+.bstack .brow { animation: fadeUp 0.5s ease both; }
 #posts .card { animation: fadeUp 0.5s ease both; }
 
 @media (max-width: 640px) {
@@ -663,7 +828,10 @@ button:focus-visible,
   .wrap-hero { padding: 56px 32px; }
   .hgrid { grid-template-columns: 1fr; gap: 36px; text-align: left; }
   .ring { margin: 0 auto; width: 220px; height: 220px; }
-  .pgrid { grid-template-columns: 1fr; }
+  .brow-split {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
   #home .wrap-hero,
   #home .hgrid,
   #home .hgrid > div:first-child { text-align: left; }

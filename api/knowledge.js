@@ -123,7 +123,7 @@ Resume / Experience Summary (from website):
 - Hedge Fund Research Analyst, Smithsonian Endowment, 2013
 - Sr. Specialist, Equities & Options, Charles Schwab, 2008–2011
 
-Currently Building: Dividend Watch, Chore Tracker App, Golf Analytics App, Job Search Agent, This Website
+Currently Building: Dividend Watch, AI Evals Tool, Golf Analytics App, Habit Tracker
 
 Recent Posts: "7 Lessons I Learned Turning Around SaaS Products" (Dividend Watch retro), "My Daily AI Product Toolkit" (ChatGPT, Gemini, Claude, Cursor, Perplexity)
 `;

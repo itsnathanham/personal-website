@@ -302,6 +302,208 @@
         },
       ];
 
+      const BUILDING_DATA = [
+        {
+          id: "dividend-watch",
+          title: "Dividend Watch (Sold)",
+          desc: "Executing a product-led turnaround for a B2C investing analytics SaaS with 39,000 users.",
+          overview:
+            "Acquired a struggling investing SaaS and led a product-led turnaround focused on ICP refinement, activation, retention, and monetization. Shipped full-cycle features, sunset misaligned work, and used surveys and interviews to re-center the product on dividend investors.",
+          tags: ["Product-led growth", "Cursor", "Claude", "Figma/Claude Design"],
+          links: [{ label: "Visit site", href: "https://dividend.watch/" }],
+          images: [
+            {
+              src: "assets/building/dividend-watch-features.png",
+              alt: "Dividend Watch product features: dividend tracker, safety score, portfolio calendar, and performance overview",
+            },
+            {
+              src: "assets/building/dividend-watch-dashboard.png",
+              alt: "Dividend Watch portfolio dividends dashboard with income metrics and monthly payout chart",
+            },
+          ],
+        },
+        {
+          id: "ai-evals",
+          title: "AI Evals Tool",
+          desc: "Built an exploratory tool-calling app, plus a Promptfoo-powered eval dashboard to compare LLM models on accuracy, policy/red-team refusals, cost, and latency.",
+          overview: null,
+          tags: ["Cursor", "Claude", "Promptfoo", "Personal project"],
+          links: [
+            { label: "Visit site", href: "https://household-finance-copilot-inky.vercel.app/" },
+            { label: "Github", href: "https://github.com/itsnathanham" },
+          ],
+          images: [
+            {
+              src: "assets/building/ai-evals-dashboard.png",
+              alt: "AI Evals Tool dashboard comparing model pass rate, fail rate, cost, and latency",
+            },
+            {
+              src: "assets/building/ai-evals-run-detail.png",
+              alt: "AI Evals Tool run detail with by-model metrics and individual test cases",
+            },
+          ],
+        },
+        {
+          id: "golf-analytics",
+          title: "iOS/WatchOS Golf Analytics",
+          desc: "Tracking rounds, handicap trends, and performance insights, GenAI coaching assistant.",
+          overview:
+            "A personal golf analytics app for iPhone and Apple Watch — log rounds, track handicap trends, and surface performance insights, with a GenAI coaching assistant layered on top of your own data.",
+          tags: ["Cursor", "Claude", "Figma/Claude Design", "Personal project", "GenAI assistant"],
+          links: [{ label: "Github", href: "https://github.com/itsnathanham" }],
+          images: [],
+        },
+        {
+          id: "habit-tracker",
+          title: "iOS/WatchOS Habit Tracker",
+          desc: "Make your goals and habits stick with advanced analytics and streak mechanics.",
+          overview:
+            "An iOS and WatchOS habit tracker focused on streak mechanics and analytics that make goals stick — designed and iterated with AI-assisted product and design workflows.",
+          tags: ["Cursor", "Claude", "Figma/Claude Design", "Personal project"],
+          links: [],
+          images: [
+            {
+              src: "assets/building/placeholder-coming-soon.svg",
+              alt: "Habit Tracker screenshot coming soon",
+            },
+            {
+              src: "assets/building/placeholder-coming-soon.svg",
+              alt: "Habit Tracker screenshot coming soon",
+            },
+          ],
+        },
+      ];
+
+      function BuildingProjects() {
+        const [openId, setOpenId] = useState(null);
+
+        const toggle = (id) => {
+          setOpenId((current) => (current === id ? null : id));
+        };
+
+        return (
+          <div className="bstack">
+            {BUILDING_DATA.map((p) => {
+              const isOpen = openId === p.id;
+              const panelId = `building-panel-${p.id}`;
+              return (
+                <div key={p.id} className={`brow card${isOpen ? " is-open" : ""}`}>
+                  <div className="accent-bar" />
+                  <button
+                    type="button"
+                    className="brow-header"
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
+                    onClick={() => toggle(p.id)}
+                  >
+                    <div className="brow-header-text">
+                      <h3 id={`building-title-${p.id}`}>{p.title}</h3>
+                      <p>{p.desc}</p>
+                      <div className="brow-tags">
+                        {p.tags.map((t) => (
+                          <span key={t} className="tag">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <svg
+                      className="brow-chevron"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
+                  <div
+                    id={panelId}
+                    className="brow-panel"
+                    role="region"
+                    aria-labelledby={`building-title-${p.id}`}
+                    aria-hidden={!isOpen}
+                    inert={!isOpen ? true : undefined}
+                  >
+                    <div className="brow-panel-inner">
+                      <div className="brow-split">
+                        <div className="brow-copy">
+                          {p.overview && (
+                            <p className="brow-overview">{p.overview}</p>
+                          )}
+                          {p.links.length > 0 && (
+                            <div className="brow-ctas">
+                              {p.links.map((l) => (
+                                <a
+                                  key={l.label}
+                                  href={l.href}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="brow-visit"
+                                >
+                                  {l.label}
+                                  <svg
+                                    width="12"
+                                    height="12"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                  >
+                                    <path d="M7 17L17 7M17 7h-8M17 7v8" />
+                                  </svg>
+                                </a>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <div className="brow-media">
+                          {p.images.length > 0 ? (
+                            <>
+                              <img
+                                className="brow-shot brow-shot-primary"
+                                src={p.images[0].src}
+                                alt={p.images[0].alt}
+                                loading="lazy"
+                              />
+                              {p.images.length > 1 && (
+                                <div className="brow-thumbs">
+                                  {p.images.slice(1).map((img, i) => (
+                                    <img
+                                      key={`${img.src}-${i}`}
+                                      className="brow-shot"
+                                      src={img.src}
+                                      alt={img.alt}
+                                      loading="lazy"
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <div className="brow-media-placeholder" aria-hidden="true">
+                              Screenshots coming soon
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      }
+
       function SinglePage() {
         return (
           <main className="page">
@@ -436,79 +638,7 @@
             <div id="building" className="strip section-anchor">
               <div className="wrap">
                 <h2 className="sh">Currently Building</h2>
-                <div className="pgrid">
-                  {[
-                    {
-                      title: "Dividend Watch (Sold)",
-                      desc: "Executing a product-led turnaround for a B2C investing analytics SaaS with 39,000 users.",
-                      tags: [
-                        "Product-led growth",
-                        "Cursor",
-                        "Claude",
-                        "Figma/Claude Design",
-                      ],
-                      link: "https://dividend.watch/",
-                    },
-                    {
-                      title: "iOS/WatchOS Golf Analytics",
-                      desc: "Tracking rounds, handicap trends, and performance insights, GenAI coaching assistant.",
-                      tags: ["Cursor", "Claude", "Figma/Claude Design", "Personal project", "GenAI assistant"],
-                      link: "https://github.com/itsnathanham",
-                    },
-                    {
-                      title: "iOS/WatchOS Habit Tracker",
-                      desc: "Make your goals and habits stick with advanced analytics and streak mechanics",
-                      tags: ["Cursor", "Claude", "Figma/Claude Design", "Personal project"],
-                      link: null,
-                    },
-                    {
-                      title: "This Portfolio Website",
-                      desc: "A fast, clean personal website built and iterated with AI-assisted workflows, including a custom built-from-scratch GenAI assistant.",
-                      tags: ["Claude", "Cursor", "GenAI assistant"],
-                      link: null,
-                    },
-                  ].map((p) => {
-                    const cardContent = (
-                      <>
-                        <div className="accent-bar" />
-                        <div className="card-content-tight">
-                          <h3 style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                            {p.title}
-                            {p.link && (
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ opacity: 0.8 }}>
-                              <path d="M7 17L17 7M17 7h-8M17 7v8" />
-                            </svg>
-                          )}
-                          </h3>
-                          <p>{p.desc}</p>
-                          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                            {p.tags.map((t) => (
-                              <span key={t} className="tag">
-                                {t}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </>
-                    );
-                    return p.link ? (
-                      <a
-                        key={p.title}
-                        href={p.link}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="card"
-                        style={{ padding: 0, textDecoration: "none", color: "inherit", display: "block" }}
-                      >
-                        {cardContent}
-                      </a>
-                    ) : (
-                      <div key={p.title} className="card" style={{ padding: 0 }}>
-                        {cardContent}
-                      </div>
-                    );
-                  })}
-                </div>
+                <BuildingProjects />
               </div>
             </div>
 
