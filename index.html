@@ -119,6 +119,66 @@
         );
       }
 
+      function ExpandableBody({ children }) {
+        const [expanded, setExpanded] = useState(false);
+        const [canExpand, setCanExpand] = useState(false);
+        const ref = useRef(null);
+
+        useEffect(() => {
+          const el = ref.current;
+          if (!el) return;
+          const measure = () => {
+            if (expanded) return;
+            setCanExpand(el.scrollHeight > el.clientHeight + 1);
+          };
+          measure();
+          const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+          if (ro) ro.observe(el);
+          window.addEventListener("resize", measure);
+          return () => {
+            if (ro) ro.disconnect();
+            window.removeEventListener("resize", measure);
+          };
+        }, [children, expanded]);
+
+        return (
+          <div className="resume-expand">
+            <div
+              ref={ref}
+              className={`resume-expand-body${expanded ? "" : " is-clamped"}`}
+            >
+              {children}
+            </div>
+            {canExpand && (
+              <button
+                type="button"
+                className="rmore resume-more"
+                aria-expanded={expanded}
+                onClick={() => setExpanded((v) => !v)}
+              >
+                {expanded ? "less" : "more"}
+              </button>
+            )}
+          </div>
+        );
+      }
+
+      function RoleBody({ bullets, desc }) {
+        return (
+          <ExpandableBody>
+            {bullets ? (
+              <ul className="resume-bullets">
+                {bullets.map((b) => (
+                  <li key={b}>{b}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="resume-desc">{desc}</p>
+            )}
+          </ExpandableBody>
+        );
+      }
+
       const DEFAULT_QUESTIONS = [
         "Analyze Nathan's fit for a specific role",
         "Ask a question about Nathan's product leadership experience.",
@@ -242,7 +302,6 @@
                     </button>
                   ))}
                 </div>
-                <p className="chat-disclaimer">AI may contain mistakes. Reach out to Nathan for full details.</p>
               </div>
             ) : (
               <div className="chat-messages" ref={messagesContainerRef}>
@@ -283,6 +342,7 @@
                 {isLoading ? "..." : "Send"}
               </button>
             </div>
+            <p className="chat-disclaimer">AI may contain mistakes. Reach out to Nathan for full details.</p>
           </div>
         );
       }
@@ -302,6 +362,30 @@
         },
       ];
 
+      const DIVIDEND_WATCH_BULLETS = [
+        "Acquired an investing SaaS with a 1-star rating that drifted from its ICP. Took full P&L ownership and refocused the product around the core user — now consistently rated 5 stars with 39,000 users.",
+        "Rationalized a feature portfolio spanning 5 net-new builds (shipped 8 full-cycle features, sunset 3), sequenced around ICP re-engagement, leveraging user surveys & interviews and market research.",
+        "Defined product roadmap spanning 3 stakeholder groups, delivering an 18-month turnaround in under 12 months — 50% faster than forecasted and leading to a profitable exit.",
+        "Increased trial conversion from 28% to 73% diagnosing pain points and drop offs through user surveys, analytics, and UX audits. Rebuilt onboarding flows around TTV and product reliability.",
+        "Identified key 0 to 90-day retention levers and reduced churn from 11% to 5% partnering with engineering to prioritize data accuracy, API reliability, and user-requested feature updates.",
+        "Identified pricing and feature portfolio opportunities, sequencing Pro tier feature releases and simplifying pricing to raise annual plan adoption from 40% to 85%, driving 119% LTV growth.",
+        "Owned product lifecycle for a Claude-powered dividend investing copilot, including system prompt engineering, guardrail design for regulatory compliance, evals strategy, and direct API integration.",
+        "Owned product lifecycle for AI-powered PDF portfolio import feature, using LLM document extraction to compress TTV to 2 minutes (80% improvement). Ran model training and golden dataset evals.",
+        "Accelerated engineering velocity shipping 15+ lifecycle product updates leveraging AI-assisted engineering workflows (Cursor, Claude Code, Figma).",
+      ];
+
+      const MOTLEY_FOOL_DIRECTOR_BULLETS = [
+        "Incubated a 0-to-1 consumer finance product that scaled to $100M revenue and a ~35-person organization by helping users make confident, trusted money decisions.",
+        "Secured $5M internal seed investment using a 50,000-respondent user research survey to sequence credit and banking as launch verticals, shape core UX, and build the momentum that won CEO and cross-functional buy-in on the product vision and to reprioritize resources toward the MVP.",
+        "Owned the product roadmap across 6 product verticals (credit cards, banking, mortgage, investing, insurance, personal loans), aligning 7 cross-functional teams behind a shared product vision.",
+        "Led product rationalization of two absorbed business lines, recommending sunset of ~$6M annual revenue based on ICP misalignment.",
+        "Built the SEO function from zero. Conceived the strategy and led team through 1-to-100 stage to 5M MAUs and $7.2M revenue, capturing #1 rankings in high-competition personal finance categories.",
+        "Launched 8+ paid acquisition channels (email, display, PPC, social), scaling to a $50M+ annual budget. Owned lifecycle funnel performance and the platform infrastructure that powered it, including a custom CMS, reporting systems, attribution modeling, and A/B testing infrastructure.",
+        "Optimized post-launch UX through behavioral analysis, usability interviews, and A/B testing, focused on information hierarchy and TTV, targeting 20%+ lift per experiment.",
+        "Recruited and built a 20-person team (3 product leads, 6 GTM strategists, 1 compliance lead, 10 contractors), directing cross-functional partnership with engineering, data science, and design to drive alignment and velocity behind product vision.",
+        "Targeted coaching accelerated 3 direct reports from IC to people-management roles in less than 12 months.",
+      ];
+
       function SinglePage() {
         return (
           <main className="page">
@@ -316,15 +400,16 @@
                       <span className="grad">Product Leader</span>
                     </h1>
                     <p>
-                      Senior product leader with founder range. Created a 0 to 1
-                      consumer finance marketplace product that scaled to $100M+
-                      revenue, leading the product vision and earned growth P&L.
-                      Acquired a struggling investing SaaS as a founder, executing
-                      a product-led turnaround to improve customer trust,
-                      activation, retention, and monetization (119% LTV increase,
-                      11% to 5% churn, 28% to 73% trial conversion) in under a
-                      year. Equally comfortable with 0 to 1 vision, 1 to 100 scale, and
-                      the full-stack product work in between.
+                      9-figure product creator, acquisition to exit as a founder, with GM range in between
+                    </p>
+                    <p>
+                      Incubated a 0-to-1 fintech product that scaled to $100M revenue, leading the product vision with P&amp;L ownership, resulting in a xx% increase in the enterprise valuation.
+                    </p>
+                    <p>
+                      Acquired an investing analytics SaaS as a founder, executing a product-led turnaround to improve trust, activation, retention, and monetization (+119% LTV, 11% to 5% churn, 28% to 73% trial conversion) in under a year.
+                    </p>
+                    <p>
+                      Equally comfortable with 0-to-1 vision, 1-to-100 scale, shipping AI in regulated spaces, and the full-stack product work in between.
                     </p>
                   </div>
                   <div className="hero-photo" style={{ display: "flex", justifyContent: "center" }}>
@@ -374,36 +459,36 @@
                           <span className="resume-title">Head of Product & Growth</span>
                           <span className="resume-meta">Dividend Watch (NH82 Media) • 2022 – 2026</span>
                         </div>
-                        <p className="resume-desc">Acquired a struggling investing SaaS (1-star Trustpilot, drifting from ICP) and executed a full product-led turnaround, now consistently 5 stars, growing to 39,000 users, 119% LTV increase</p>
+                        <RoleBody bullets={DIVIDEND_WATCH_BULLETS} />
                       </div>
                       <div className="resume-timeline">
                         <div className="resume-timeline-item">
                           <div className="resume-item-header">
-                            <span className="resume-title">Vice President, Product & Growth</span>
+                            <span className="resume-title">Director, Product & Growth</span>
                             <span className="resume-meta">Motley Fool • 2016 – 2022</span>
                           </div>
-                          <p className="resume-desc">Led product roadmap and SEO P&L for $100M+ finance marketplace product, managed and developed team of 20</p>
+                          <RoleBody bullets={MOTLEY_FOOL_DIRECTOR_BULLETS} />
                         </div>
                         <div className="resume-timeline-item">
                           <div className="resume-item-header">
                             <span className="resume-title">Director, International Growth Marketing</span>
                             <span className="resume-meta">Motley Fool • 2016</span>
                           </div>
-                          <p className="resume-desc">Growth marketing spanning Canada, UK, Singapore, Germany, and Japan territories</p>
+                          <RoleBody desc="Growth marketing spanning Canada, UK, Singapore, Germany, and Japan territories" />
                         </div>
                         <div className="resume-timeline-item">
                           <div className="resume-item-header">
                             <span className="resume-title">Performance Marketing Manager</span>
                             <span className="resume-meta">Motley Fool • 2015 – 2016</span>
                           </div>
-                          <p className="resume-desc">Lifecycle marketing managing a $20M budget across SEM, social, display, email, and native sponsorship channels</p>
+                          <RoleBody desc="Lifecycle marketing managing a $20M budget across SEM, social, display, email, and native sponsorship channels" />
                         </div>
                         <div className="resume-timeline-item">
                           <div className="resume-item-header">
                             <span className="resume-title">Editorial Lead</span>
                             <span className="resume-meta">Motley Fool • 2014</span>
                           </div>
-                          <p className="resume-desc">Growth lead overseeing tech sector strategy, doubling revenue and traffic in 6 months</p>
+                          <RoleBody desc="Growth lead overseeing tech sector strategy, doubling revenue and traffic in 6 months" />
                         </div>
                       </div>
                       <div className="resume-item">
@@ -411,21 +496,21 @@
                           <span className="resume-title">Equity Research Intern</span>
                           <span className="resume-meta">Tamro Capital • 2013</span>
                         </div>
-                        <p className="resume-desc">Conducted fundamental equity research and built valuation models across technology, industrials, healthcare, and energy sectors for a $2.2B AUM mutual fund.</p>
+                        <RoleBody desc="Conducted fundamental equity research and built valuation models across technology, industrials, healthcare, and energy sectors for a $2.2B AUM mutual fund." />
                       </div>
                       <div className="resume-item">
                         <div className="resume-item-header">
                           <span className="resume-title">Hedge Fund Research Analyst</span>
                           <span className="resume-meta">Smithsonian Endowment • 2013</span>
                         </div>
-                        <p className="resume-desc">Performed quantitative and qualitative due diligence on hedge fund managers across long/short equity, global macro, and event-driven strategies for a $1.4B endowment portfolio.</p>
+                        <RoleBody desc="Performed quantitative and qualitative due diligence on hedge fund managers across long/short equity, global macro, and event-driven strategies for a $1.4B endowment portfolio." />
                       </div>
                       <div className="resume-item">
                         <div className="resume-item-header">
                           <span className="resume-title">Sr. Specialist, Equities & Options</span>
                           <span className="resume-meta">Charles Schwab • 2008 – 2011</span>
                         </div>
-                        <p className="resume-desc">Advised high-net-worth clients on equity and options strategies, ranking in the 94th percentile for performance, earning peer- and senior-leader-nominated awards for client service and teamwork.</p>
+                        <RoleBody desc="Advised high-net-worth clients on equity and options strategies, ranking in the 94th percentile for performance, earning peer- and senior-leader-nominated awards for client service and teamwork." />
                       </div>
                     </section>
                   </article>
@@ -438,6 +523,12 @@
                 <h2 className="sh">Currently Building</h2>
                 <div className="pgrid">
                   {[
+                    {
+                      title: "Conversational AI & Evals",
+                      desc: "Built a personal finance AI copilot, plus an eval and observability infrastructure to compare LLM models on accuracy, policy/red-team refusals, estimated cost, and latency.",
+                      tags: ["Claude", "Cursor", "Evals", "GenAI assistant"],
+                      link: null,
+                    },
                     {
                       title: "Dividend Watch (Sold)",
                       desc: "Executing a product-led turnaround for a B2C investing analytics SaaS with 39,000 users.",

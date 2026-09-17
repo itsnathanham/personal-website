@@ -155,7 +155,8 @@ nav {
   font-size: 11px;
   color: var(--text-muted);
   opacity: 0.85;
-  margin: 16px 0 0;
+  margin: 12px 0 0;
+  text-align: center;
 }
 
 .chat-question-chips {
@@ -376,6 +377,9 @@ nav {
   max-width: 640px;
   margin-bottom: 8px;
 }
+.hero p + p {
+  margin-top: 10px;
+}
 
 /* Photo frame - warm slate style */
 .ring {
@@ -483,6 +487,42 @@ nav {
   line-height: 1.65;
   font-family: 'DM Sans', sans-serif;
   margin: 0;
+}
+
+.resume-expand {
+  margin-top: 2px;
+}
+.resume-expand-body {
+  font-size: 14px;
+  line-height: 1.65;
+}
+.resume-expand-body.is-clamped {
+  max-height: calc(1.65em * 2);
+  overflow: hidden;
+}
+.resume-more {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.resume-bullets {
+  margin: 0;
+  padding-left: 18px;
+}
+.resume-bullets li {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.65;
+  font-family: 'DM Sans', sans-serif;
+  margin-bottom: 8px;
+}
+.resume-bullets li:last-child {
+  margin-bottom: 0;
 }
 
 /* Timeline for grouped roles */
