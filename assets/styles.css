@@ -155,7 +155,8 @@ nav {
   font-size: 11px;
   color: var(--text-muted);
   opacity: 0.85;
-  margin: 16px 0 0;
+  margin: 12px 0 0;
+  text-align: center;
 }
 
 .chat-question-chips {
@@ -377,6 +378,18 @@ nav {
   margin-bottom: 8px;
 }
 
+.hero-lead {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text);
+  max-width: 640px;
+  margin-bottom: 16px;
+}
+
+.hero-lead strong {
+  font-weight: 600;
+}
+
 /* Photo frame - warm slate style */
 .ring {
   width: 240px;
@@ -572,6 +585,11 @@ nav {
 }
 .rmore:hover { color: var(--accent); }
 
+.rmore.resume-more {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .rw { display: inline-block; transition: opacity 0.35s ease, transform 0.35s ease; }
 .rw.on { opacity: 1; transform: translateY(0); }
 .rw.off { opacity: 0; transform: translateY(8px); }
@@ -645,6 +663,39 @@ nav {
   line-height: 1.65;
   font-family: 'DM Sans', sans-serif;
   margin: 0;
+}
+
+.resume-desc-stack .resume-desc + .resume-desc {
+  margin-top: 10px;
+}
+
+.resume-expand {
+  margin-top: 2px;
+}
+.resume-expand-body {
+  font-size: 14px;
+  line-height: 1.65;
+}
+.resume-expand-body.is-clamped {
+  max-height: calc(1.65em * 2);
+  overflow: hidden;
+}
+.resume-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.resume-more-icon {
+  flex-shrink: 0;
 }
 
 /* Timeline for grouped roles */
