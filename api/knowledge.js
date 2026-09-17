@@ -127,7 +127,7 @@ Resume / Experience Summary (from website):
 - Hedge Fund Research Analyst, Smithsonian Endowment, 2013
 - Sr. Specialist, Equities & Options, Charles Schwab, 2008–2011
 
-Currently Building: Conversational AI & Evals, Dividend Watch (Sold), iOS/WatchOS Golf Analytics, iOS/WatchOS Habit Tracker, This Portfolio Website
+Currently Building: Dividend Watch (Sold), Conversational AI & Evals, iOS/WatchOS Golf Analytics, iOS/WatchOS Habit Tracker
 
 Recent Posts: "7 Lessons I Learned Turning Around SaaS Products" (Dividend Watch retro), "My Daily AI Product Toolkit" (ChatGPT, Gemini, Claude, Cursor, Perplexity)
 `;
