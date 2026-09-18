@@ -378,25 +378,6 @@
 
       const BUILDING_DATA = [
         {
-          id: "dividend-watch",
-          title: "Dividend Watch (Sold)",
-          desc: "Executing a product-led turnaround for a B2C investing analytics SaaS with 39,000 users.",
-          overview:
-            "Acquired a struggling investing SaaS and led a product-led turnaround focused on ICP refinement, activation, retention, and monetization. Shipped full-cycle features, sunset misaligned work, and used surveys and interviews to re-center the product on dividend investors.",
-          tags: ["Product-led growth", "Cursor", "Claude", "Figma/Claude Design"],
-          links: [{ label: "Visit site", href: "https://dividend.watch/" }],
-          images: [
-            {
-              src: "assets/building/dividend-watch-features.png",
-              alt: "Dividend Watch product features: dividend tracker, safety score, portfolio calendar, and performance overview",
-            },
-            {
-              src: "assets/building/dividend-watch-dashboard.png",
-              alt: "Dividend Watch portfolio dividends dashboard with income metrics and monthly payout chart",
-            },
-          ],
-        },
-        {
           id: "ai-evals",
           title: "Conversational AI & Evals",
           desc: "Built a personal finance AI copilot, plus an eval and observability infrastructure to compare LLM models on accuracy, policy/red-team refusals, estimated cost, and latency.",
@@ -414,6 +395,25 @@
             {
               src: "assets/building/ai-evals-run-detail.png",
               alt: "Conversational AI & Evals run detail with by-model metrics and individual test cases",
+            },
+          ],
+        },
+        {
+          id: "dividend-watch",
+          title: "Dividend Watch (Sold)",
+          desc: "Executing a product-led turnaround for a B2C investing analytics SaaS with 39,000 users.",
+          overview:
+            "Acquired a struggling investing SaaS and led a product-led turnaround focused on ICP refinement, activation, retention, and monetization. Shipped full-cycle features, sunset misaligned work, and used surveys and interviews to re-center the product on dividend investors.",
+          tags: ["Product-led growth", "Cursor", "Claude", "Figma/Claude Design"],
+          links: [{ label: "Visit site", href: "https://dividend.watch/" }],
+          images: [
+            {
+              src: "assets/building/dividend-watch-features.png",
+              alt: "Dividend Watch product features: dividend tracker, safety score, portfolio calendar, and performance overview",
+            },
+            {
+              src: "assets/building/dividend-watch-dashboard.png",
+              alt: "Dividend Watch portfolio dividends dashboard with income metrics and monthly payout chart",
             },
           ],
         },
@@ -486,7 +486,7 @@
       ];
 
       function BuildingProjects() {
-        const [openId, setOpenId] = useState(null);
+        const [openId, setOpenId] = useState(BUILDING_DATA[0].id);
 
         const toggle = (id) => {
           setOpenId((current) => (current === id ? null : id));
